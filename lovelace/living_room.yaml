@@ -1,0 +1,52 @@
+title: Stue / Køkken
+id: living_room
+icon: mdi:sofa
+cards:
+- type: glance
+  title: Scenarier
+  show_header_toggle: false
+  show_state: false
+  column_width: 25%
+  entities:
+    - entity: scene.madlavning    
+      tap_action: call-service
+      service: scene.turn_on
+    - entity: scene.spise
+      tap_action: call-service
+      service: scene.turn_on
+    - entity: scene.hygge
+      tap_action: call-service
+      service: scene.turn_on
+- type: custom:mini-media-player
+  entity: media_player.living_room
+  name: Sonos Stue
+  artwork: cover
+  hide_power: true
+  show_source: true
+
+- type: vertical-stack
+  cards:
+  - type: entities
+    title: Lys / Stue
+    show_header_toggle: true
+    entities:
+      - light.living_room_spots
+      - light.living_room_dinning_table_pendel
+      - light.living_room_couch_table_pendel
+      - light.living_room_lamp1
+  - type: entities
+    title: Lys / Køkken
+    show_header_toggle: true
+    entities:
+      - light.kitchen_table_lamps
+
+- type: entities
+  title: Klima
+  show_header_toggle: false
+  entities:
+    - climate.living_room    
+    - sensor.kkken_temperature
+    - binary_sensor.terrassedr    
+
+#- type: media-control
+#  entity: media_player.living_room

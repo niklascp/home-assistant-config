@@ -1,0 +1,20 @@
+homeassistant:
+  customize:
+    sensor.outdoor_temperature:
+      friendly_name: Udendørs temperatur
+    sensor.outdoor_humidity:
+      friendly_name: Udendørs luftfugtighed
+      
+sensor:
+  - platform: mqtt
+    state_topic: "outdoors/s1"
+    name: outdoor_temperature
+    unit_of_measurement: '°C'
+    value_template: "{{ value_json.temperature }}"
+    device_class: temperature
+  - platform: mqtt
+    state_topic: "outdoors/s1"
+    name: outdoor_humidity
+    unit_of_measurement: '%'
+    value_template: "{{ value_json.humidity }}"
+    device_class: humidity

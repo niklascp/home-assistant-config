@@ -1,0 +1,9 @@
+- alias: system_start_ble
+  trigger:
+  - platform: event
+    event_type: homeassistant_start
+  action:
+  - delay: '00:00:30'
+  - service: hassio.addon_start
+    data_template:
+      addon: '51e684a3_ibeacon'

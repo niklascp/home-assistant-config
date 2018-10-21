@@ -1,0 +1,28 @@
+automation:
+- alias: 'William / Kip sengelampe'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.william_bed_lamp_toogle
+    to: 'on'
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.william_bed_lamp
+
+- alias: 'William / Godnat Program'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.william_goodnight_toogle
+    to: 'on'
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      entity_id: light.william_spots
+  - service: light.turn_on
+    data:
+      entity_id: light.william_bed_lamp
+      brightness_pct: 15

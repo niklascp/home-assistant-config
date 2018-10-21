@@ -1,0 +1,6 @@
+title: Familie
+type: glance
+column_width: 25%
+entities:
+  - device_tracker.niklas
+  - device_tracker.karina  

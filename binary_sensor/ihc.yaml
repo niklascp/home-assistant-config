@@ -1,0 +1,34 @@
+  - platform: ihc
+    binary_sensors:
+      #- id: 1948506
+      #name: hall_pir
+      #type: motion
+      - id: 1960722
+        name: all_off_east
+      - id: 2350354
+        name: living_room_scene_spise
+      - id: 2348050
+        name: living_room_scene_hygge        
+      - id: 2144274
+        name: living_room_dinning_table_pendel_up
+      - id: 2144530
+        name: living_room_dinning_table_pendel_down
+      - id: 2145810
+        name: living_room_dinning_table_pendel_toggle
+      - id: 2358546
+        name: living_room_couch_table_pendel_up
+      - id: 2358802
+        name: living_room_couch_table_pendel_down
+      - id: 2359058
+        name: living_room_couch_table_pendel_toggle
+      - id: 2150674
+        name: living_room_lamp_at_tv_up
+      - id: 2150930
+        name: living_room_lamp_at_tv_down
+      - id: 2151186
+        name: living_room_lamp_at_tv_toggle
+      - id: 2210652
+        name: william_bed_lamp_toogle
+      - id: 2210908
+        name: william_goodnight_toogle
+        

@@ -1,0 +1,19 @@
+- alias: alarm_notify_away_disarmed_niklas
+  trigger:
+  - platform: state
+    entity_id: group.family
+    from: 'home'
+    to: 'not_home'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.jens_borns_vej_alarm
+    state: 'disarmed'
+  action:
+  - service: notify.niklas_s8
+    data:
+      message: "Der ser ikke ud til der er nogen personer i huset, men alermen er ikke tilkoblet."
+      title: "Alarm ej tilkoblet"

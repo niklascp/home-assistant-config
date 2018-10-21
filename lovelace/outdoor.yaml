@@ -1,0 +1,24 @@
+title: Udendørs
+id: outdoor
+icon: mdi:tree
+cards:
+- type: vertical-stack
+  cards:
+  - type: entities
+    title: Bryggers
+    show_header_toggle: false
+    entities:
+      - sensor.washer_status
+      - sensor.dryer_status
+- type: vertical-stack
+  cards:
+  - type: entities
+    title: Indkørsel
+    show_header_toggle: false
+    entities:
+      - light.outdoor_driveway_spots
+  - type: entities
+    title: Have
+    show_header_toggle: false    
+    entities:
+      - light.outdoor_garden_lamps

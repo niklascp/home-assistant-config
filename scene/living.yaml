@@ -1,0 +1,41 @@
+  - name: Hygge
+    entities:
+      light.living_room_lamp1: on
+      light.living_room_spots:
+        state: on
+        brightness: 64
+        transition: 5
+      light.living_room_dinning_table_pendel:
+        state: on
+        brightness: 200
+        kelvin: 2600
+        transition: 5
+      light.living_room_couch_table_pendel:
+        state: on
+        brightness: 230
+        kelvin: 2800
+        transition: 5
+      light.kitchen_table_lamps: on
+
+  - name: Spise
+    entities:
+      light.living_room_lamp1: on
+      light.living_room_spots:
+        state: on
+        brightness: 128
+        transition: 5
+      light.living_room_dinning_table_pendel:
+        state: on
+        brightness: 255
+        kelvin: 3000
+        transition: 5
+      light.living_room_couch_table_pendel:
+        state: on
+        brightness: 180
+        kelvin: 2800
+        transition: 5
+      light.kitchen_table_lamps: off
+
+  - name: Madlavning
+    entities:
+      light.kitchen_table_lamps: on      

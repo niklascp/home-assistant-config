@@ -1,0 +1,160 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret time_zone
+  # Customization file
+  customize: !include customize.yaml
+  packages:  !include_dir_named packages
+
+# Enables the frontend
+frontend:
+  javascript_version: latest
+  themes: !include_dir_merge_named themes
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  base_url: !secret http_base_url
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Tracked history is kept for 10 days
+recorder: !include recorder.yaml
+
+# Enables support for tracking state changes over time
+history:
+  exclude:
+    domains:
+      - sun
+      - input_boolean
+      - automation
+      - light
+      - group
+      - script
+    entities:
+      - device_tracker.niklas_s8
+      - device_tracker.niklas_nmap_s8
+      - device_tracker.niklas_s8_gps
+      - device_tracker.karina_iphone
+      - device_tracker.karina_nmap_6s
+
+      - sensor.karinas_iphone_battery_level
+      - sensor.karinas_iphone_battery_state
+
+# View all events in a logbook
+logbook:
+  exclude:
+    domains:
+      - group
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+# iOS App
+ios:
+
+notify:
+  - name: niklas_s8
+    platform: simplepush
+    device_key: !secret simplepush_niklas_s8_device_key
+
+group: !include groups.yaml
+automation: !include_dir_merge_list automation/
+script: !include scripts.yaml
+zone: !include zones.yaml
+
+# MQTT
+mqtt:
+  broker: core-mosquitto
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  
+device_tracker:
+  - platform: owntracks
+    max_gps_accuracy: 200
+  - platform: owntracks_http
+    max_gps_accuracy: 200
+  - platform: gpslogger
+  - platform: nmap_tracker
+    hosts:
+      - 10.0.1.41 # Niklas Samsung S8
+      - 10.0.1.42 # Karina iPhone 6S
+  - platform: composite
+    name: niklas
+    entity_id:
+      - device_tracker.niklas_s8  
+      - device_tracker.niklas_s8_gps
+      - device_tracker.niklas_nmap_s8  
+  - platform: composite
+    name: karina
+    entity_id:
+      - device_tracker.karina_iphone  
+      - device_tracker.karina_nmap_6s
+
+homekit:
+  filter:
+    include_domains:
+      - alarm_control_panel
+      - light
+    
+verisure:
+  username: !secret verisure_username
+  password: !secret verisure_password
+  
+ihc:
+  url: !secret ihc_url
+  username: !secret ihc_username
+  password: !secret ihc_password
+  auto_setup: False
+  info: True
+
+hue:
+  bridges:
+    - host: 10.0.1.5
+      allow_hue_groups: false
+
+light: !include_dir_merge_list light/
+binary_sensor: !include_dir_merge_list binary_sensor/
+
+sensor:
+  - platform: uptime
+
+input_boolean: !include input_boolean.yaml
+scene: !include_dir_merge_list scene/

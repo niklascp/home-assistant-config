@@ -1,0 +1,14 @@
+*.pid
+*.xml
+*.csr
+*.crt
+*.key
+*.conf
+*.pickle
+.*
+!/.gitignore
+tts/
+www/
+home-assistant.log
+secrets.yaml
+known_devices.yaml

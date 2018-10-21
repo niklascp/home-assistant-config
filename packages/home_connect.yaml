@@ -1,0 +1,68 @@
+homeassistant:
+  customize:
+    sensor.washer_status:
+      friendly_name: Vaskemaskine
+      icon: mdi:washing-machine
+    sensor.dryer_status:
+      friendly_name: Tørretumbler
+      icon: mdi:tumble-dryer
+    script.washer_cycle_started:
+      hidden: true
+    script.washer_cycle_finished:
+      hidden: true
+    script.dryer_cycle_started:
+      hidden: true
+    script.dryer_cycle_finished:
+      hidden: true
+
+sensor:
+  - platform: mqtt
+    state_topic: "home_connect/washer"
+    name: washer_status
+    value_template: >-
+      {% if value == 'running' %}
+        Kører
+      {% else %}
+        Færdig
+      {% endif %}
+
+  - platform: mqtt
+    state_topic: "home_connect/dryer"
+    name: dryer_status
+    value_template: >-
+      {% if value == 'running' %}
+        Kører
+      {% else %}
+        Færdig
+      {% endif %}
+
+script:
+  washer_cycle_started:
+    sequence:
+    - service: mqtt.publish
+      data:
+        topic: 'home_connect/washer'
+        payload: 'running'
+        retain: 'true'
+  washer_cycle_finished:
+    sequence:
+    - service: mqtt.publish
+      data:
+        topic: 'home_connect/washer'
+        payload: 'idle'
+        retain: 'true'
+
+  dryer_cycle_started:
+    sequence:
+    - service: mqtt.publish
+      data:
+        topic: 'home_connect/dryer'
+        payload: 'running'
+        retain: 'true'
+  dryer_cycle_finished:
+    sequence:
+    - service: mqtt.publish
+      data:
+        topic: 'home_connect/dryer'
+        payload: 'idle'
+        retain: 'true'
