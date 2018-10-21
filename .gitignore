@@ -5,6 +5,7 @@
 *.key
 *.conf
 *.pickle
+__pycache__
 .*
 !/.gitignore
 tts/
