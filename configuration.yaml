@@ -50,24 +50,15 @@ recorder: !include recorder.yaml
 
 # Enables support for tracking state changes over time
 history:
-  exclude:
-    domains:
-      - sun
-      - input_boolean
-      - automation
-      - light
-      - group
-      - script
+  include:
     entities:
-      - device_tracker.niklas_s8
-      - device_tracker.niklas_nmap_s8
-      - device_tracker.niklas_s8_gps
-      - device_tracker.karina_iphone
-      - device_tracker.karina_nmap_6s
-
-      - sensor.karinas_iphone_battery_level
-      - sensor.karinas_iphone_battery_state
-
+      # Appliances
+      - device_tracker.niklas
+      - device_tracker.karina
+      # Appliances
+      - sensor.washer_status
+      - sensor.dryer_status
+      
 # View all events in a logbook
 logbook:
   exclude:
@@ -113,6 +104,7 @@ device_tracker:
     max_gps_accuracy: 200
   - platform: gpslogger
   - platform: nmap_tracker
+    interval_seconds: 30
     hosts:
       - 10.0.1.41 # Niklas Samsung S8
       - 10.0.1.42 # Karina iPhone 6S
@@ -137,13 +129,15 @@ homekit:
 verisure:
   username: !secret verisure_username
   password: !secret verisure_password
-  
+  locks: false
+  mouse: false
+
 ihc:
   url: !secret ihc_url
   username: !secret ihc_username
   password: !secret ihc_password
-  auto_setup: False
-  info: True
+  auto_setup: false
+  info: false
 
 hue:
   bridges:
@@ -155,6 +149,10 @@ binary_sensor: !include_dir_merge_list binary_sensor/
 
 sensor:
   - platform: uptime
+  - platform: systemmonitor
+    resources:
+      - type: processor_use
+      - type: memory_use
 
 input_boolean: !include input_boolean.yaml
 scene: !include_dir_merge_list scene/
