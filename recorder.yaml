@@ -6,18 +6,10 @@
   purge_keep_days: 10
   exclude: 
     domains:
+      - automation
+      - scene
       - updater
     entities:
-      - automation.living_room_dinning_table_pendel_up
-      - automation.living_room_dinning_table_pendel_down
-      - automation.living_room_dinning_table_pendel_toggle
-      - automation.living_room_couch_table_pendel_up
-      - automation.living_room_couch_table_pendel_down
-      - automation.living_room_couch_table_pendel_toggle
-      - automation.living_room_lamp_at_tv_up
-      - automation.living_room_lamp_at_tv_down
-      - automation.living_room_lamp_at_tv_toggle
-      - automation.william__kip_sengelampe
       - binary_sensor.all_off_east
       - binary_sensor.living_room_dinning_table_pendel_up
       - binary_sensor.living_room_dinning_table_pendel_down
@@ -29,4 +21,7 @@
       - binary_sensor.living_room_lamp_at_tv_down
       - binary_sensor.living_room_lamp_at_tv_toggle
       - binary_sensor.william_bed_lamp_toggle
+      - sensor.time
+      - sensor.date
+      - sensor.date__time
       - sensor.uptime

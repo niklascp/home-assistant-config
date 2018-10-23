@@ -148,6 +148,11 @@ light: !include_dir_merge_list light/
 binary_sensor: !include_dir_merge_list binary_sensor/
 
 sensor:
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
   - platform: uptime
   - platform: systemmonitor
     resources:
