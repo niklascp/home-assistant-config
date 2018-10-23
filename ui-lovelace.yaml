@@ -4,8 +4,8 @@
 # Any changes made to it will be overwritten the next time the script is run.
 
 resources:
-- {type: js, url: '/local/lovelace\monster-card.js?1540315913.7450686'}
-- {type: module, url: '/local/lovelace\mini-media-player.js?1540315913.7450686&v=0.8.7'}
+- {type: js, url: '/local/lovelace\monster-card.js?1540319340.6040235'}
+- {type: module, url: '/local/lovelace\mini-media-player.js?1540319340.6040235&v=0.8.7'}
 title: Smarthjem
 views:
 - cards:
@@ -101,6 +101,13 @@ views:
   - entities: [sensor.living_room_temp, sensor.william_temp, sensor.kkken_temperature,
       sensor.hall_temp, sensor.stuen_humidity, sensor.gang_til_vrelser_humidity]
     show_header_toggle: false
+    type: entities
+  - entities: [input_boolean.climate_night_mode, input_datetime.climate_night_mode_start,
+      input_datetime.climate_night_mode_end, input_number.climate_target_temperature_living_room_day,
+      input_number.climate_target_temperature_living_room_night, input_number.climate_target_temperature_bed_rooms_day,
+      input_number.climate_target_temperature_bed_rooms_night]
+    show_header_toggle: false
+    title: Klimastyring
     type: entities
   - cards:
     - entities:

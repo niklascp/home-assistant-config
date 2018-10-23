@@ -83,3 +83,51 @@ sensor:
     availability_topic: 'heat/floorB4E62D44BFFA/online'
     payload_available: 'True'
     payload_not_available: 'False'
+
+input_number:
+  climate_target_temperature_living_room_day:
+    name: 'Stue / Dag Temp.'
+    icon: mdi:thermometer 
+    initial: 22
+    min: 16
+    max: 28
+    step: 1
+    mode: box
+  climate_target_temperature_living_room_night:
+    name: 'Stue / Nat Temp.'
+    icon: mdi:thermometer
+    initial: 18
+    min: 16
+    max: 28
+    step: 1
+    mode: box
+  climate_target_temperature_bed_rooms_day:
+    name: 'Værelser / Dag Temp.'
+    icon: mdi:thermometer
+    initial: 20
+    min: 16
+    max: 28
+    step: 1
+    mode: box
+  climate_target_temperature_bed_rooms_night:
+    name: 'Værelser / Nat Temp.'
+    icon: mdi:thermometer
+    initial: 18
+    min: 16
+    max: 28
+    step: 1
+    mode: box
+
+input_boolean:
+  climate_night_mode:
+    name: 'Natsænkning'
+
+input_datetime:
+  climate_night_mode_start:
+    name: 'Natsænkning Start'
+    has_date: false
+    has_time: true
+  climate_night_mode_end:
+    name: 'Natsænkning Slut'
+    has_date: false
+    has_time: true
