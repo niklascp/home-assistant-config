@@ -4,8 +4,8 @@
 # Any changes made to it will be overwritten the next time the script is run.
 
 resources:
-- {type: js, url: '/local/lovelace\monster-card.js?1540319340.6040235'}
-- {type: module, url: '/local/lovelace\mini-media-player.js?1540319340.6040235&v=0.8.7'}
+- {type: js, url: '/local/lovelace\monster-card.js?1540491285.033161'}
+- {type: module, url: '/local/lovelace\mini-media-player.js?1540491285.033161&v=0.8.7'}
 title: Smarthjem
 views:
 - cards:
@@ -20,6 +20,7 @@ views:
       - binary_sensor.bryggersdr
       - binary_sensor.terrassedr
       - binary_sensor.sovevrelsesvindue
+      - binary_sensor.william_window
       show_header_toggle: false
       title: Sikkerhed
       type: entities
@@ -62,7 +63,7 @@ views:
     show_header_toggle: false
     title: Soveværelse
     type: entities
-  - entities: [light.william_spots, light.william_bed_lamp, climate.william]
+  - entities: [light.william_spots, light.william_bed_lamp, climate.william, binary_sensor.william_window]
     show_header_toggle: false
     title: William
     type: entities
@@ -129,8 +130,7 @@ views:
   id: climate
   title: Klima
 - cards:
-  - entities: [sensor.uptime, sensor.memory_use, sensor.processor_use, binary_sensor.ping_ihc_controller,
-      binary_sensor.ping_hue_bridge]
+  - entities: [sensor.uptime, sensor.db_size, binary_sensor.ping_ihc_controller, binary_sensor.ping_hue_bridge]
     show_header_toggle: false
     title: System
     type: entities

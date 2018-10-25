@@ -6,9 +6,10 @@
   purge_keep_days: 10
   exclude: 
     domains:
+      - sun
+      - updater
       - automation
       - scene
-      - updater
     entities:
       - binary_sensor.all_off_east
       - binary_sensor.living_room_dinning_table_pendel_up

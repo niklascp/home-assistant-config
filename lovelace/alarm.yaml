@@ -10,3 +10,4 @@ cards:
     - binary_sensor.bryggersdr
     - binary_sensor.terrassedr
     - binary_sensor.sovevrelsesvindue
+    - binary_sensor.william_window

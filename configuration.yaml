@@ -120,12 +120,6 @@ device_tracker:
       - device_tracker.karina_iphone  
       - device_tracker.karina_nmap_6s
 
-homekit:
-  filter:
-    include_domains:
-      - alarm_control_panel
-      - light
-    
 verisure:
   username: !secret verisure_username
   password: !secret verisure_password
@@ -146,18 +140,5 @@ hue:
 
 light: !include_dir_merge_list light/
 binary_sensor: !include_dir_merge_list binary_sensor/
-
-sensor:
-  - platform: time_date
-    display_options:
-      - 'time'
-      - 'date'
-      - 'date_time'
-  - platform: uptime
-  - platform: systemmonitor
-    resources:
-      - type: processor_use
-      - type: memory_use
-
 input_boolean: !include input_boolean.yaml
 scene: !include_dir_merge_list scene/

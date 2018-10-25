@@ -1,0 +1,14 @@
+#################################################################
+## Groups
+#################################################################
+
+  default_view:
+    view: yes
+    icon: mdi:home
+    entities: []
+
+  family:
+    name: Familie
+    entities:
+      - device_tracker.niklas
+      - device_tracker.karina
