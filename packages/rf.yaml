@@ -18,47 +18,29 @@ binary_sensor:
 # These automations just republish states as retained messages
 # when receiving raw input from RF-bridge.
 automation:
-  - alias: rf_william_window_open
+  - alias: rf_william_window
     trigger:
       platform: mqtt
       topic: rfbridge-01/rfin
-      payload: '369C01E0053C14B50A'
+    condition:
+      condition: template
+      value_template: "{{ trigger.payload[12:16] == '14B5' and trigger.payload[16:18] in ['0A', '0E'] }}"
     action:
       - service: mqtt.publish
-        data:
+        data_template:
           topic: 'home-assistant/william/window'
-          payload: 'ON'
+          payload: "{{ 'ON' if trigger.payload[-2:] == '0A' else 'OFF' }}"
           retain: true
-  - alias: rf_william_window_close
+  - alias: rf_bedroom_window
     trigger:
       platform: mqtt
       topic: rfbridge-01/rfin
-      payload: '366A01D6053C14B50E'
+    condition:
+      condition: template
+      value_template: "{{ trigger.payload[12:16] == '14AF' and trigger.payload[16:18] in ['0A', '0E'] }}"
     action:
       - service: mqtt.publish
-        data:
-          topic: 'home-assistant/william/window'
-          payload: 'OFF'
-          retain: true
-  - alias: rf_bedroom_window_open
-    trigger:
-      platform: mqtt
-      topic: rfbridge-01/rfin
-      payload: '369C01CC055014AF0A'
-    action:
-      - service: mqtt.publish
-        data:
+        data_template:
           topic: 'home-assistant/bedroom/window'
-          payload: 'ON'
-          retain: true
-  - alias: rf_bedroom_window_close
-    trigger:
-      platform: mqtt
-      topic: rfbridge-01/rfin
-      payload: '368801D6054614AF0E'
-    action:
-      - service: mqtt.publish
-        data:
-          topic: 'home-assistant/bedroom/window'
-          payload: 'OFF'
+          payload: "{{ 'ON' if trigger.payload[-2:] == '0A' else 'OFF' }}"
           retain: true
