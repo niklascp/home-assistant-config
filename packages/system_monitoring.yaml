@@ -1,3 +1,9 @@
+homeassistant:
+  customize:
+    sensor.db_size:
+      friendly_name: 'Database Størrelse'
+      icon: 'mdi:database'
+
 sensor:
   - platform: time_date
     display_options:
