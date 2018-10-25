@@ -6,9 +6,10 @@ cards:
   title: System
   show_header_toggle: false
   entities:
-    - sensor.uptime    
-    - sensor.memory_use
-    - sensor.processor_use
+    - sensor.uptime
+    - sensor.db_size    
+    #- sensor.memory_use
+    #- sensor.processor_use
     - binary_sensor.ping_ihc_controller
     - binary_sensor.ping_hue_bridge
 - type: custom:monster-card
