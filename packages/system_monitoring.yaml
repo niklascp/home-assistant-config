@@ -1,0 +1,19 @@
+sensor:
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+  - platform: uptime
+  #- platform: systemmonitor
+  #  resources:
+  #    - type: processor_use
+  #    - type: memory_use
+  - platform: sql
+    db_url: !secret mariadb_url
+    scan_interval: 3600
+    queries:
+      - name: db_size
+        query: "select round(sum(data_length + index_length) / 1024 / 1024, 1) as db_size from information_schema.tables WHERE table_schema='homeassistant'"
+        column: db_size
+        unit_of_measurement: MB

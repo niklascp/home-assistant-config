@@ -1,0 +1,36 @@
+homeassistant:
+  customize:
+    binary_sensor.william_window:
+      friendly_name: 'William / Vindue'
+
+binary_sensor:
+  - platform: mqtt
+    name: william_window
+    state_topic: 'home-assistant/william/window'
+    device_class: window
+
+# These automations just republish retained messages from RF-bridge matching 
+# specific IDs to the MQTT sensors defined above.
+automation:
+  - alias: william_window_open
+    trigger:
+      platform: mqtt
+      topic: rfbridge-01/rfin
+      payload: '369C01E0053C14B50A'
+    action:
+      - service: mqtt.publish
+        data:
+          topic: 'home-assistant/william/window'
+          payload: 'ON'
+          retain: true
+  - alias: william_window_close
+    trigger:
+      platform: mqtt
+      topic: rfbridge-01/rfin
+      payload: '366A01D6053C14B50E'
+    action:
+      - service: mqtt.publish
+        data:
+          topic: 'home-assistant/william/window'
+          payload: 'OFF'
+          retain: true
