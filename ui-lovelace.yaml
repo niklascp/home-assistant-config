@@ -4,8 +4,8 @@
 # Any changes made to it will be overwritten the next time the script is run.
 
 resources:
-- {type: js, url: '/local/lovelace\monster-card.js?1540495031.5710876'}
-- {type: module, url: '/local/lovelace\mini-media-player.js?1540495031.5710876&v=0.8.7'}
+- {type: js, url: '/local/lovelace\monster-card.js?1540495281.281419'}
+- {type: module, url: '/local/lovelace\mini-media-player.js?1540495281.281419&v=0.8.7'}
 title: Smarthjem
 views:
 - cards:
@@ -21,6 +21,7 @@ views:
       - binary_sensor.terrassedr
       - binary_sensor.sovevrelsesvindue
       - binary_sensor.william_window
+      - binary_sensor.bedroom_window
       show_header_toggle: false
       title: Sikkerhed
       type: entities

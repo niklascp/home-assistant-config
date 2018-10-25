@@ -11,3 +11,4 @@ cards:
     - binary_sensor.terrassedr
     - binary_sensor.sovevrelsesvindue
     - binary_sensor.william_window
+    - binary_sensor.bedroom_window
