@@ -41,6 +41,8 @@ updater:
 
 # Discover some devices automatically
 discovery:
+  ignore:
+    - philips_hue
 
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
@@ -136,6 +138,7 @@ ihc:
 hue:
   bridges:
     - host: 10.0.1.5
+      allow_unreachable: true
       allow_hue_groups: false
 
 light: !include_dir_merge_list light/
