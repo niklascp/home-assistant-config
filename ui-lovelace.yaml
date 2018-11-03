@@ -3,17 +3,17 @@
 # Any changes made to it will be overwritten the next time the script is run.
 
 resources:
-  - {type: js, url: /local/lovelace\monster-card.js?1541249065.6612556}
-  - {type: module, url: /local/lovelace\mini-media-player.js?1541249065.6612556&v=0.8.7}
+  - {type: js, url: /local/lovelace\monster-card.js?1541259416.96993}
+  - {type: module, url: /local/lovelace\mini-media-player.js?1541259416.96993&v=0.8.7}
 title: Smarthjem
 views:
   - cards:
-      - id: 69cc1afbaf184e89b91626e732989544  # Automatically created id
+      - id: 5f6f2d793b3e4ca78ab2bd0c54f29504  # Automatically created id
         column_width: 25%
         entities: [device_tracker.niklas, device_tracker.karina]
         title: Familie
         type: glance
-      - id: 6f36319e07f446039215e2c0be1a6e11  # Automatically created id
+      - id: 8dc984dde0134c6f8cebfe0b7dd33b19  # Automatically created id
         cards:
           - entities:
               - {entity: alarm_control_panel.jens_borns_vej_alarm, name: Alarm}
@@ -31,7 +31,7 @@ views:
     id: home
     title: Home
   - cards:
-      - id: 19fc95b06fcc42a1b29e10a1c9454c4d  # Automatically created id
+      - id: f97ce225c600427b9e17abbe0019a74a  # Automatically created id
         column_width: 25%
         entities:
           - {entity: scene.madlavning, service: scene.turn_on, tap_action: call-service}
@@ -41,10 +41,10 @@ views:
         show_state: false
         title: Scenarier
         type: glance
-      - {id: c02554462b794d99a0c4900b574f8e17  # Automatically created id
+      - {id: 6f96d23c878f4a75a90af8b33d37f867  # Automatically created id
 , artwork: cover, entity: media_player.living_room, hide_power: true, name: Sonos
           Stue, show_source: true, type: custom:mini-media-player}
-      - id: 07089576cb9e4d0f9852395202ca6af9  # Automatically created id
+      - id: 1e070578f4f3412eafeba1f9cfea13df  # Automatically created id
         cards:
           - entities: [light.living_room_spots, light.living_room_dinning_table_pendel,
               light.living_room_couch_table_pendel, light.living_room_lamp_at_tv,
@@ -57,7 +57,7 @@ views:
             title: Lys / Køkken
             type: entities
         type: vertical-stack
-      - id: 8d5fedeecf7842c88085e6c566850be0  # Automatically created id
+      - id: c3b12f13f5f8492981276fe56b0ca17b  # Automatically created id
         entities: [climate.living_room, sensor.kkken_temperature, binary_sensor.terrassedr]
         show_header_toggle: false
         title: Klima
@@ -66,17 +66,17 @@ views:
     id: living_room
     title: Stue / Køkken
   - cards:
-      - id: e10ad4f4a3044d668f205a012b681a87  # Automatically created id
-        entities: [binary_sensor.bedroom_window]
+      - id: 4cc92d66b7d64f85a04a4dfbf194c6e6  # Automatically created id
+        entities: [light.bedroom_bed_lamp_right, binary_sensor.bedroom_window]
         show_header_toggle: false
         title: Soveværelse
         type: entities
-      - id: 2d43a328d21948da9c8ccb1836945655  # Automatically created id
+      - id: a71cfd8a30f8475db832d240a450bb18  # Automatically created id
         entities: [light.william_spots, light.william_bed_lamp, climate.william, binary_sensor.william_window]
         show_header_toggle: false
         title: William
         type: entities
-      - id: 5a6ab9c0a56b4254880252d81fbc3d3c  # Automatically created id
+      - id: 2c8f4312c07c4b048407a738b307afd2  # Automatically created id
         entities: [climate.hall]
         show_header_toggle: false
         title: Gang
@@ -85,14 +85,14 @@ views:
     id: bedrooms
     title: Værelser
   - cards:
-      - id: cfe31e6a7ed449e38aa8fa80bcb2f4ad  # Automatically created id
+      - id: de205112433448e78526f655e0818b9d  # Automatically created id
         cards:
           - entities: [sensor.washer_status, sensor.dryer_status]
             show_header_toggle: false
             title: Bryggers
             type: entities
         type: vertical-stack
-      - id: f95c107ca0654c46bb5126a8df129367  # Automatically created id
+      - id: fb4943d8b013413e84312a28d7b20132  # Automatically created id
         cards:
           - entities: [light.outdoor_driveway_spots]
             show_header_toggle: false
@@ -107,17 +107,17 @@ views:
     id: outdoor
     title: Udendørs
   - cards:
-      - id: dc791f2c2ccb48e1b9c4b1a83c9f760d  # Automatically created id
+      - id: 9451901f5324471a928eeb40956115d6  # Automatically created id
         entities: [climate.living_room, climate.william, climate.hall]
         show_header_toggle: false
         title: Gulvvarme
         type: glance
-      - id: 0ee85f8770f64d34a548ef74b92f9be1  # Automatically created id
+      - id: 1b032ffd11234d7caa6604c8a0829ceb  # Automatically created id
         entities: [sensor.living_room_temp, sensor.william_temp, sensor.kkken_temperature,
           sensor.hall_temp, sensor.stuen_humidity, sensor.gang_til_vrelser_humidity]
         show_header_toggle: false
         type: entities
-      - id: 764434db18da42b0b05b5f3c62d395e2  # Automatically created id
+      - id: 928c5e9f812a48e092116b73f814aa73  # Automatically created id
         entities: [input_boolean.climate_night_mode, input_datetime.climate_night_mode_start,
           input_datetime.climate_night_mode_end, input_number.climate_target_temperature_living_room_day,
           input_number.climate_target_temperature_living_room_night, input_number.climate_target_temperature_bed_rooms_day,
@@ -125,7 +125,7 @@ views:
         show_header_toggle: false
         title: Klimastyring
         type: entities
-      - id: 4458ddca5ba84bf0b8e7b59555686d8e  # Automatically created id
+      - id: 44ae42ff9abd46db91f03b7cef7fe5dc  # Automatically created id
         cards:
           - entities:
               - {entity: sensor.living_room_temp, name: Stue}
@@ -146,19 +146,19 @@ views:
     id: climate
     title: Klima
   - cards:
-      - id: 972dab10d8294631b81fa9be515016f0  # Automatically created id
+      - id: 4b56406bcd6447ab9936c0c18b999c69  # Automatically created id
         entities: [sensor.uptime, sensor.db_size, binary_sensor.ping_ihc_controller,
           binary_sensor.ping_hue_bridge]
         show_header_toggle: false
         title: System
         type: entities
-      - id: 75fd4d3ebc41429abc5ea1d9f8c9e336  # Automatically created id
+      - id: 45d0c478f55b4ce4a11e1ffef8c778d4  # Automatically created id
         card: {title: Enhedssporing, type: entities}
         filter:
           include:
             - {domain: device_tracker}
         type: custom:monster-card
-      - id: 62759275ee9a4dfb94505f9384af13f8  # Automatically created id
+      - id: 721acf8a15014146af72b1a540b4c5ea  # Automatically created id
         entities: [input_boolean.vacation_mode, automation.welcome_home_at_night]
         show_header_toggle: false
         title: Automatik

@@ -6,6 +6,7 @@ cards:
   title: Soveværelse
   show_header_toggle: false
   entities:
+    - light.bedroom_bed_lamp_right
     - binary_sensor.bedroom_window
 - type: entities
   title: William
