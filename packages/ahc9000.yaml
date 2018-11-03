@@ -75,14 +75,14 @@ sensor:
     payload_available: 'True'
     payload_not_available: 'False'
   - platform: mqtt
-    name: hall_temp
+    name: william_temp
     state_topic: 'heat/floorB4E62D44BFFA/3/current'
     unit_of_measurement: '°C'
     availability_topic: 'heat/floorB4E62D44BFFA/online'
     payload_available: 'True'
     payload_not_available: 'False'
   - platform: mqtt
-    name: william_temp
+    name: hall_temp
     state_topic: 'heat/floorB4E62D44BFFA/6/current'
     unit_of_measurement: '°C'
     availability_topic: 'heat/floorB4E62D44BFFA/online'
