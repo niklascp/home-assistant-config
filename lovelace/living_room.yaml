@@ -33,6 +33,7 @@ cards:
       - light.living_room_spots
       - light.living_room_dinning_table_pendel
       - light.living_room_couch_table_pendel
+      - light.living_room_lamp_at_tv
       - light.living_room_lamp1
   - type: entities
     title: Lys / Køkken

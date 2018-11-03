@@ -17,7 +17,7 @@
   - platform: template
     lights:
       living_room_lamp1:
-        friendly_name: "Stue / Lampe ved TV"
+        friendly_name: "Stue / Lampe ved skænk"
         value_template: "{{ states.switch.stue.state }}"
         turn_on:
           service: switch.turn_on

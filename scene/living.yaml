@@ -15,6 +15,11 @@
         brightness: 230
         kelvin: 2800
         transition: 5
+      light.living_room_lamp_at_tv:
+        state: on
+        brightness: 160
+        kelvin: 2600
+        transition: 5
       light.kitchen_table_lamps: on
 
   - name: Spise
@@ -34,7 +39,12 @@
         brightness: 180
         kelvin: 2800
         transition: 5
-      light.kitchen_table_lamps: off
+      light.living_room_lamp_at_tv:
+        state: on
+        brightness: 180
+        kelvin: 2800
+        transition: 5
+      #light.kitchen_table_lamps: off
 
   - name: Madlavning
     entities:
