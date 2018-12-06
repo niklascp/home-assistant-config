@@ -100,10 +100,10 @@ mqtt:
   password: !secret mqtt_password
   
 device_tracker:
-  - platform: owntracks
-    max_gps_accuracy: 200
-  - platform: owntracks_http
-    max_gps_accuracy: 200
+  #- platform: owntracks
+  #  max_gps_accuracy: 200
+  #- platform: owntracks_http
+  #  max_gps_accuracy: 200
   - platform: gpslogger
   - platform: nmap_tracker
     interval_seconds: 30

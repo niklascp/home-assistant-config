@@ -7,6 +7,8 @@ cards:
   show_header_toggle: false
   entities:
     - light.bedroom_bed_lamp_right
+    - sensor.bedroom_temperature
+    - sensor.bedroom_humidity
     - binary_sensor.bedroom_window
 - type: entities
   title: William

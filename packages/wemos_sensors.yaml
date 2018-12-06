@@ -1,0 +1,16 @@
+homeassistant:
+  customize:
+    sensor.bedroom_temperature:
+      friendly_name: Sovevær. / Temp.
+    sensor.bedroom_humidity:
+      friendly_name: Sovevær. / Luftfugt.
+      
+sensor:
+  - name: bedroom_temperature
+    platform: mqtt
+    state_topic: sensor-01/temperature
+    unit_of_measurement: °C
+  - name: bedroom_humidity
+    platform: mqtt
+    state_topic: sensor-01/humidity
+    unit_of_measurement: '%'
