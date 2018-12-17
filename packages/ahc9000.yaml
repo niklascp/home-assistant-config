@@ -137,46 +137,46 @@ input_datetime:
     has_date: false
     has_time: true
 
-automation:
-- alias: climate_night_mode_start
-  trigger:
-    - platform: template
-      value_template: '{{ (states.input_datetime.climate_night_mode_start.attributes.timestamp | int | timestamp_custom("%H:%M", False)) == states.sensor.time.state }}'
-  condition:
-    condition: state
-    entity_id: input_boolean.climate_night_mode
-    state: 'on'
-  action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.living_room
-        temperature: '{{ states.input_number.climate_target_temperature_living_room_night.state }}'
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.william
-        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_night.state }}'
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.hall
-        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_night.state }}'
-- alias: climate_night_mode_end
-  trigger:
-    - platform: template
-      value_template: '{{ (states.input_datetime.climate_night_mode_end.attributes.timestamp | int | timestamp_custom("%H:%M", False)) == states.sensor.time.state }}'
-  condition:
-    condition: state
-    entity_id: input_boolean.climate_night_mode
-    state: 'on'
-  action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.living_room
-        temperature: '{{ states.input_number.climate_target_temperature_living_room_day.state }}'
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.william
-        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_day.state }}'
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.hall
-        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_day.state }}'
+#automation:
+#- alias: climate_night_mode_start
+#  trigger:
+#    - platform: template
+#      value_template: '{{ (states.input_datetime.climate_night_mode_start.attributes.timestamp | int | timestamp_custom("%H:%M", False)) == states.sensor.time.state }}'
+#  condition:
+#    condition: state
+#    entity_id: input_boolean.climate_night_mode
+#    state: 'on'
+#  action:
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.living_room
+#        temperature: '{{ states.input_number.climate_target_temperature_living_room_night.state }}'
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.william
+#        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_night.state }}'
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.hall
+#        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_night.state }}'
+#- alias: climate_night_mode_end
+#  trigger:
+#    - platform: template
+#      value_template: '{{ (states.input_datetime.climate_night_mode_end.attributes.timestamp | int | timestamp_custom("%H:%M", False)) == states.sensor.time.state }}'
+#  condition:
+#    condition: state
+#    entity_id: input_boolean.climate_night_mode
+#    state: 'on'
+#  action:
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.living_room
+#        temperature: '{{ states.input_number.climate_target_temperature_living_room_day.state }}'
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.william
+#        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_day.state }}'
+#    - service: climate.set_temperature
+#      data_template:
+#        entity_id: climate.hall
+#        temperature: '{{ states.input_number.climate_target_temperature_bed_rooms_day.state }}'

@@ -4,8 +4,8 @@
 # Any changes made to it will be overwritten the next time the script is run.
 
 resources:
-- {type: js, url: '/local/lovelace\monster-card.js?1543674511.90713'}
-- {type: module, url: '/local/lovelace\mini-media-player.js?1543674511.90713&v=0.8.7'}
+- {type: js, url: '/local/lovelace\monster-card.js?1544973967.9878478'}
+- {type: module, url: '/local/lovelace\mini-media-player.js?1544973967.9878478&v=0.8.7'}
 title: Smarthjem
 views:
 - cards:

@@ -1,18 +1,18 @@
 
-  - platform: ihc
-    lights:
-      - id: 787549
-        name: living_room_spots
-        dimmable: True
-      - id: 2087518
-        name: kitchen_table_lamps
-      - id: 1911899
-        name: outdoor_garden_lamps
-      - id: 2174555
-        name: outdoor_driveway_spots
-      - id: 2207325
-        name: william_spots
-        dimmable: True
+  #- platform: ihc
+  #  lights:
+  #    - id: 787549
+  #      name: living_room_spots
+  #      dimmable: True
+  #    - id: 2087518
+  #      name: kitchen_table_lamps
+  #    - id: 1911899
+  #      name: outdoor_garden_lamps
+  #    - id: 2174555
+  #      name: outdoor_driveway_spots
+  #    - id: 2207325
+  #      name: william_spots
+  #      dimmable: True
 
   - platform: template
     lights:
