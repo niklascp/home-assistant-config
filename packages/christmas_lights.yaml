@@ -1,0 +1,61 @@
+homeassistant:
+  customize:
+    group.christmas_lights:
+      friendly_name: 'Julelys'
+    light.outdoor_christmas_lights_garden:
+      friendly_name: 'Have / Julelys'
+
+group:
+  christmas_lights:
+    - light.outdoor_christmas_lights_garden
+    - light.outdoor_carport_lamps
+
+light:
+  - platform: switch
+    name: outdoor_christmas_lights_garden
+    entity_id: switch.outdoor_garden
+
+input_boolean:
+  christmas_light:
+    name: 'Julelys'
+    icon: 'mdi:pine-tree'
+
+input_datetime:
+  christmas_light_start:
+    name: 'Julelys Start'
+    has_date: false
+    has_time: true
+  christmas_light_end:
+    name: 'Julelys Slut'
+    has_date: false
+    has_time: true
+
+automation:
+- alias: outdoor_christmas_lights_on
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: "00:00:00"
+  - platform: time
+    at: "06:00:00"
+  condition:
+    condition: state
+    entity_id: input_boolean.christmas_light
+    state: 'on'
+  action:
+    service: light.turn_on
+    entity_id: group.christmas_lights
+- alias: outdoor_christmas_lights_off
+  trigger:
+  - platform: time
+    at: "00:00:00"
+  - platform: sun
+    event: sunrise
+    offset: "00:00:00"
+  condition:
+    condition: state
+    entity_id: input_boolean.christmas_light
+    state: 'on'
+  action:
+    service: light.turn_off
+    entity_id: group.christmas_lights
