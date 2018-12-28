@@ -1,0 +1,86 @@
+binary_sensor.bryggersdr:
+  device_class: door
+binary_sensor.hoveddr:
+  device_class: door
+binary_sensor.sovevrelsesvindue:
+  device_class: window
+  friendly_name: Kontor / Vindue
+binary_sensor.terrassedr:
+  device_class: door
+zone.work_ncp:
+  friendly_name: Movia
+light.living_room_spots:
+  friendly_name: Stue / Spots i loft
+light.kitchen_table_lamps:
+  friendly_name: Køkken / Lys under skabe
+light.outdoor_garden_lamps:
+  friendly_name: Have / Terrasse
+binary_sensor.hall_pir:
+  friendly_name: Gang / Pir
+  hidden: true
+switch.stue:
+  hidden: true
+binary_sensor.all_off_east:
+  hidden: true
+light.kitchen:
+  friendly_name: Køkken
+light.living_room:
+  friendly_name: Stue
+light.outdoor:
+  friendly_name: Udendørs
+binary_sensor.ping_ihc_controller:
+  friendly_name: IHC Controller
+binary_sensor.ping_hue_bridge:
+  friendly_name: HUE Bridge
+light.outdoor_driveway_spots:
+  friendly_name: Indkørsel / Spots i udhæng
+zone.dtu:
+  friendly_name: DTU
+automation.welcome_home_at_night:
+  friendly_name: Velkomst aften
+scene.spise:
+  icon: mdi:silverware-variant
+scene.hygge:
+  icon: mdi:sofa
+light.william_spots:
+  friendly_name: William / Spots i loft
+scene.madlavning:
+  icon: mdi:pot
+light.living_room_couch_table_pendel:
+  friendly_name: Stue / Pendel over sofabord
+binary_sensor.living_room_scene_hygge:
+  friendly_name: 'IHC Input / Scene: Hygge'
+  hidden: true
+binary_sensor.living_room_scene_spise:
+  friendly_name: 'IHC Input / Scene: Spise'
+  hidden: true
+binary_sensor.living_room_couch_table_pendel_down:
+  friendly_name: IHC Input / Pendel over Sofabord (Fade Ned)
+  hidden: true
+binary_sensor.living_room_couch_table_pendel_toggle:
+  friendly_name: IHC Input / Pendel over Sofabord (Kip)
+  hidden: true
+binary_sensor.living_room_couch_table_pendel_up:
+  friendly_name: IHC Input / Pendel over Sofabord (Fade Op)
+  hidden: true
+sensor.stuen_humidity:
+  friendly_name: Stue / Luftfugtighed
+  icon: mdi:water-percent
+sensor.stuen_temperature:
+  friendly_name: Stue / Temperatur
+sensor.gang_til_vrelser_temperature:
+  friendly_name: Gang / Temperatur
+sensor.gang_til_vrelser_humidity:
+  friendly_name: Gang / Luftfugtighed
+  icon: mdi:water-percent
+sensor.kkken_temperature:
+  friendly_name: Køkken / Temp.
+binary_sensor.william_bed_lamp_toogle:
+  hidden: true
+binary_sensor.william_goodnight_toogle:
+  hidden: true
+switch.outdoor_garden:
+  friendly_name: Have / Stikk. Terrasse
+  icon: mdi:power-plug
+light.outdoor_carport_lamps:
+  friendly_name: Indkørsel / Carport

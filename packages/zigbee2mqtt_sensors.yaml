@@ -1,0 +1,65 @@
+# TODO: This could all be done more ellegant with auto discovery, but, if this is to be enabled then I need to disable or modify the
+# auto-discovery of the floor heating system first.
+sensor:
+  # Temperature 1: Gæste badeværelse
+  - platform: mqtt
+    name: guest_bathroom_temperature
+    unit_of_measurement: "°C"
+    device_class: temperature
+    value_template: "{{ value_json.temperature }}"
+    json_attributes:
+    - linkquality
+    - battery
+    - voltage
+    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002b882dd_temperature_zigbee2mqtt
+  - platform: mqtt
+    name: guest_bathroom_humidity
+    unit_of_measurement: "%"
+    device_class: humidity
+    value_template: "{{ value_json.humidity }}"
+    json_attributes:
+    - linkquality
+    - battery
+    - voltage
+    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002b882dd_humidity_zigbee2mqtt
+  - platform: mqtt
+    name: guest_bathroom_pressure
+    unit_of_measurement: hPa
+    device_class: pressure
+    value_template: "{{ value_json.pressure }}"
+    json_attributes:
+    - linkquality
+    - battery
+    - voltage
+    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    availability_topic: zigbee2mqtt/bridge/state    
+    unique_id: 0x00158d0002b882dd_pressure_zigbee2mqtt
+  # PIR 1 - Bryggers
+  - platform: mqtt
+    name: utility_room_illuminance
+    unit_of_measurement: lx
+    device_class: illuminance
+    value_template: "{{ value_json.illuminance }}"
+    json_attributes:
+    - linkquality
+    - battery
+    - voltage
+    state_topic: zigbee2mqtt/0x00158d0002b8fc1b
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002b8fc1b_illuminance_zigbee2mqtt
+
+binary_sensor:
+  # PIR 1 - Bryggers
+  - platform: mqtt
+    name: utility_room_occupancy
+    payload_on: true
+    payload_off: false
+    value_template: "{{ value_json.occupancy }}"
+    device_class: motion
+    state_topic: zigbee2mqtt/0x00158d0002b8fc1b
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002b8fc1b_occupancy_zigbee2mqtt
