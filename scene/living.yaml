@@ -4,10 +4,9 @@
       light.living_room_spots:
         state: on
         brightness: 64
-        transition: 5
       light.living_room_dinning_table_pendel:
         state: on
-        brightness: 200
+        brightness: 160
         kelvin: 2600
         transition: 5
       light.living_room_couch_table_pendel:
@@ -28,7 +27,6 @@
       light.living_room_spots:
         state: on
         brightness: 128
-        transition: 5
       light.living_room_dinning_table_pendel:
         state: on
         brightness: 255
