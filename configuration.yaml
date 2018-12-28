@@ -144,9 +144,9 @@ ihc:
         name: outdoor_garden_lamps
       - id: 2174555
         name: outdoor_driveway_spots
-      - id: 2404179
-        name: outdoor_driveway_lamps
       - id: 2404443
+        name: outdoor_carport_lamps
+      - id: 2207325
         name: william_spots
         dimmable: True
     switch:
