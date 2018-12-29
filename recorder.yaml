@@ -12,6 +12,9 @@
       - scene
     entities:
       - binary_sensor.all_off_east
+      - binary_sensor.living_room_scene_cleaning
+      - binary_sensor.living_room_scene_spise
+      - binary_sensor.living_room_scene_hygge
       - binary_sensor.living_room_dinning_table_pendel_up
       - binary_sensor.living_room_dinning_table_pendel_down
       - binary_sensor.living_room_dinning_table_pendel_toggle

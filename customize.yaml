@@ -84,3 +84,5 @@ switch.outdoor_garden:
   icon: mdi:power-plug
 light.outdoor_carport_lamps:
   friendly_name: Indkørsel / Carport
+light.living_room_glass_cabinet:
+  friendly_name: Stue / Lys i glasskab

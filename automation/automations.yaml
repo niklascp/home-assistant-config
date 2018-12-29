@@ -1,4 +1,5 @@
-- alias: Sluk Øst
+- id: all_off_east
+  alias: Sluk Øst
   trigger:
   - platform: state
     entity_id: binary_sensor.all_off_east
@@ -11,8 +12,10 @@
       - light.living_room_couch_table_pendel
       - light.living_room_lamp_at_tv
       - light.living_room_lamp1      
+      - light.living_room_glass_cabinet
 
-- alias: living_room_scene_spise
+- id: living_room_scene_spise
+  alias: living_room_scene_spise
   hide_entity: True
   trigger:
   - platform: state
@@ -21,7 +24,8 @@
   - service: scene.turn_on
     entity_id: scene.spise
 
-- alias: living_room_scene_hygge
+- id: living_room_scene_hygge
+  alias: living_room_scene_hygge
   hide_entity: True
   trigger:
   - platform: state
@@ -29,6 +33,16 @@
   action:
   - service: scene.turn_on
     entity_id: scene.hygge
+
+- id: living_room_scene_cleaning
+  alias: 'IHC Input / Scene: Rengøring'
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_scene_cleaning
+  action:
+  - service: scene.turn_on
+    entity_id: scene.rengring
 
 - alias: living_room_dinning_table_pendel_up
   hide_entity: True
@@ -118,6 +132,9 @@
     state: 'below_horizon'
   - condition: state
     entity_id: light.outdoor_driveway_spots
+    state: 'off'
+  - condition: state
+    entity_id: light.living_room_spots
     state: 'off'
   action:
   - service: light.turn_on
