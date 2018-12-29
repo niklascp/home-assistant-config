@@ -1,4 +1,4 @@
-# TODO: This could all be done more ellegant with auto discovery, but, if this is to be enabled then I need to disable or modify the
+# TODO: This could all be done more elegantly with auto discovery, but if this is to be enabled then I need to disable or modify the
 # auto-discovery of the floor heating system first.
 sensor:
   # Temperature 1: Gæste badeværelse
@@ -63,3 +63,12 @@ binary_sensor:
     state_topic: zigbee2mqtt/0x00158d0002b8fc1b
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_occupancy_zigbee2mqtt
+  - platform: mqtt
+    name: living_room_window
+    payload_on: false
+    payload_off: true
+    value_template: "{{ value_json.contact }}"
+    device_class: window
+    state_topic: zigbee2mqtt/0x00158d0002bfe535
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002bfe535_contact_zigbee2mqtt
