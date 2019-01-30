@@ -11,7 +11,7 @@ sensor:
     - linkquality
     - battery
     - voltage
-    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    state_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b882dd_temperature_zigbee2mqtt
   - platform: mqtt
@@ -23,7 +23,7 @@ sensor:
     - linkquality
     - battery
     - voltage
-    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    state_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b882dd_humidity_zigbee2mqtt
   - platform: mqtt
@@ -35,7 +35,7 @@ sensor:
     - linkquality
     - battery
     - voltage
-    state_topic: zigbee2mqtt/0x00158d0002b882dd
+    state_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state    
     unique_id: 0x00158d0002b882dd_pressure_zigbee2mqtt
   # PIR 1 - Bryggers
@@ -48,7 +48,7 @@ sensor:
     - linkquality
     - battery
     - voltage
-    state_topic: zigbee2mqtt/0x00158d0002b8fc1b
+    state_topic: zigbee2mqtt/utility_room_occupancy
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_illuminance_zigbee2mqtt
 
@@ -60,7 +60,7 @@ binary_sensor:
     payload_off: false
     value_template: "{{ value_json.occupancy }}"
     device_class: motion
-    state_topic: zigbee2mqtt/0x00158d0002b8fc1b
+    state_topic: zigbee2mqtt/utility_room_occupancy
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_occupancy_zigbee2mqtt
   - platform: mqtt
@@ -69,6 +69,6 @@ binary_sensor:
     payload_off: true
     value_template: "{{ value_json.contact }}"
     device_class: window
-    state_topic: zigbee2mqtt/0x00158d0002bfe535
+    state_topic: zigbee2mqtt/living_room_window
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002bfe535_contact_zigbee2mqtt

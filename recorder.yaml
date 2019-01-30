@@ -27,5 +27,5 @@
       - binary_sensor.william_bed_lamp_toggle
       - sensor.time
       - sensor.date
-      - sensor.date__time
+      - sensor.date_time
       - sensor.uptime

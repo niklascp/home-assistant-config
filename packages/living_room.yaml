@@ -1,0 +1,150 @@
+input_select:
+  living_room_mode:
+    name: Stue / Program
+    options:
+      - Spise
+      - Hygge
+      - Fra
+    initial: Fra
+    icon: mdi:robot
+
+# Automations
+automation:
+- alias: living_room_hygge_day
+  trigger:
+    - platform: sun
+      event: sunrise
+    - platform: state
+      entity_id: input_select.living_room_mode
+      to: 'Hygge'
+  condition:
+    - condition: and  # 'when light' condition: before sunset and after sunrise - equivalent to a state condition on `sun.sun` of `above_horizon`
+      conditions:
+        - condition: sun
+          before: sunset
+        - condition: sun
+          after: sunrise
+    - condition: state
+      entity_id: input_select.living_room_mode
+      state: 'Hygge'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.living_room_hygge_day
+
+- alias: living_room_hygge_night
+  trigger:
+    - platform: sun
+      event: sunset
+    - platform: state
+      entity_id: input_select.living_room_mode
+      to: 'Hygge'
+  condition:
+    - condition: or  # 'when dark' condition: either after sunset or before sunrise - equivalent to a state condition on `sun.sun` of `below_horizon`
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+    - condition: state
+      entity_id: input_select.living_room_mode
+      state: 'Hygge'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.living_room_hygge_night
+
+- alias: living_room_scene_hygge
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_hygge
+  action:
+    #- service: scene.turn_on
+    #  entity_id: scene.hygge
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Hygge'
+
+- alias: living_room_scene_spise
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_scene_spise
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Fra'
+    - service: scene.turn_on
+      entity_id: scene.spise
+
+- alias: living_room_scene_cleaning
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_scene_cleaning
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Fra'
+    - service: scene.turn_on
+      entity_id: scene.rengring
+
+- alias: all_off_east
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.all_off_east
+      to: 'on'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Fra'
+    - service: light.turn_off
+      entity_id:
+        - light.living_room_dinning_table_pendel
+        - light.living_room_couch_table_pendel
+        - light.living_room_lamp_at_tv
+        - light.living_room_lamp1      
+        - light.living_room_glass_cabinet
+
+# Scenes
+scene:
+- name: living_room_hygge_day
+  entities:
+    light.living_room_lamp1: off
+    light.living_room_spots: off
+    light.living_room_dinning_table_pendel:
+      state: on
+      brightness: 200
+      kelvin: 3000
+      transition: 5
+    light.living_room_couch_table_pendel:
+      state: on
+      brightness: 200
+      kelvin: 3000
+      transition: 5
+    light.living_room_lamp_at_tv: off
+    light.living_room_glass_cabinet: off
+      
+- name: living_room_hygge_night
+  entities:
+    light.living_room_lamp1: on
+    light.living_room_spots:
+      state: on
+      brightness: 64
+    light.living_room_dinning_table_pendel:
+      state: on
+      brightness: 160
+      kelvin: 2600
+      transition: 5
+    light.living_room_couch_table_pendel:
+      state: on
+      brightness: 160
+      kelvin: 2500
+      transition: 5
+    light.living_room_lamp_at_tv:
+      state: on
+      brightness: 160
+      kelvin: 2500
+      transition: 5
+    light.kitchen_table_lamps: on
+    light.living_room_glass_cabinet: on

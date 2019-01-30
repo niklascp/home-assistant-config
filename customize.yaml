@@ -1,11 +1,11 @@
-binary_sensor.bryggersdr:
+binary_sensor.bryggersdor:
   device_class: door
-binary_sensor.hoveddr:
+binary_sensor.hoveddor:
   device_class: door
-binary_sensor.sovevrelsesvindue:
+binary_sensor.sovevaerelsesvindue:
   device_class: window
   friendly_name: Kontor / Vindue
-binary_sensor.terrassedr:
+binary_sensor.terrassedor:
   device_class: door
 zone.work_ncp:
   friendly_name: Movia
@@ -68,12 +68,12 @@ sensor.stuen_humidity:
   icon: mdi:water-percent
 sensor.stuen_temperature:
   friendly_name: Stue / Temperatur
-sensor.gang_til_vrelser_temperature:
+sensor.gang_til_vaerelser_temperature:
   friendly_name: Gang / Temperatur
-sensor.gang_til_vrelser_humidity:
+sensor.gang_til_vaerelser_humidity:
   friendly_name: Gang / Luftfugtighed
   icon: mdi:water-percent
-sensor.kkken_temperature:
+sensor.kokken_temperature:
   friendly_name: Køkken / Temp.
 binary_sensor.william_bed_lamp_toogle:
   hidden: true
@@ -86,3 +86,10 @@ light.outdoor_carport_lamps:
   friendly_name: Indkørsel / Carport
 light.living_room_glass_cabinet:
   friendly_name: Stue / Lys i glasskab
+scene.rengoring:
+  icon: mdi:broom
+light.living_room_lamp1:
+  friendly_name: Stue / Lampe ved skænk
+input_boolean.zigbee_permit_join: {}
+sensor.bedroom_humidity:
+  icon: mdi:water-percent
