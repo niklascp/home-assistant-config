@@ -86,7 +86,7 @@ automation:
         entity_id: input_select.living_room_mode
         option: 'Fra'
     - service: scene.turn_on
-      entity_id: scene.rengring
+      entity_id: scene.rengoring
 
 - alias: all_off_east
   trigger:
@@ -115,12 +115,12 @@ scene:
     light.living_room_dinning_table_pendel:
       state: on
       brightness: 200
-      kelvin: 3000
+      kelvin: 2800
       transition: 5
     light.living_room_couch_table_pendel:
       state: on
       brightness: 200
-      kelvin: 3000
+      kelvin: 2800
       transition: 5
     light.living_room_lamp_at_tv: off
     light.living_room_glass_cabinet: off

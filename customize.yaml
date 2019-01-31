@@ -93,3 +93,6 @@ light.living_room_lamp1:
 input_boolean.zigbee_permit_join: {}
 sensor.bedroom_humidity:
   icon: mdi:water-percent
+automation.all_off_east:
+  friendly_name: Sluk
+  icon: mdi:stop
