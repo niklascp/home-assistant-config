@@ -1,0 +1,21 @@
+sensor:
+  # Weather prediction
+  - platform: dmi
+    location_id: 2619856
+    monitored_conditions:
+      - temperature
+      - wind_speed
+      - wind_gust
+      - wind_bearing
+      - pressure
+      - humidity
+      - precipitation
+  - platform: dmi
+    location_id: 2619856
+    monitored_conditions:
+      - temperature
+      - precipitation
+    forecasts: 
+      - 1
+      - 2
+      - 3
