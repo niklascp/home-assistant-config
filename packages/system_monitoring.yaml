@@ -5,16 +5,7 @@ homeassistant:
       icon: 'mdi:database'
 
 sensor:
-  - platform: time_date
-    display_options:
-      - 'time'
-      - 'date'
-      - 'date_time'
   - platform: uptime
-  #- platform: systemmonitor
-  #  resources:
-  #    - type: processor_use
-  #    - type: memory_use
   - platform: sql
     db_url: !secret mariadb_url
     scan_interval: 3600

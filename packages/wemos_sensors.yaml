@@ -6,11 +6,13 @@ homeassistant:
       friendly_name: Sovevær. / Luftfugt.
       
 sensor:
-  - name: bedroom_temperature
-    platform: mqtt
-    state_topic: sensor-01/temperature
-    unit_of_measurement: °C
-  - name: bedroom_humidity
-    platform: mqtt
-    state_topic: sensor-01/humidity
-    unit_of_measurement: '%'
+- platform: mqtt
+  name: bedroom_temperature
+  state_topic: bedroom/sensor/temperature/state
+  availability_topic: bedroom/status
+  unit_of_measurement: °C
+- platform: mqtt
+  name: bedroom_humidity
+  state_topic: bedroom/sensor/humidity/state
+  availability_topic: bedroom/status
+  unit_of_measurement: '%'
