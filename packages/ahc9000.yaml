@@ -25,13 +25,13 @@ climate:
     modes:
       - 'off'
       - 'heat'
-    current_temperature_topic: 'heat/floorB4E62D44BFFA/0/current'
-    temperature_command_topic: 'heat/floorB4E62D44BFFA/0/target_set'
-    temperature_state_topic: 'heat/floorB4E62D44BFFA/0/target'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    current_temperature_topic: 'heat/floor84F3EB9FC608/0/current'
+    temperature_command_topic: 'heat/floor84F3EB9FC608/0/target_set'
+    temperature_state_topic: 'heat/floor84F3EB9FC608/0/target'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
-    mode_state_topic: 'heat/floorB4E62D44BFFA/0/output'
+    mode_state_topic: 'heat/floor84F3EB9FC608/0/output'
     mode_state_template: >-
       {{ 'heat' if value == 'on' else 'off' }}
     qos: 0
@@ -40,13 +40,13 @@ climate:
     modes:
       - 'off'
       - 'heat'
-    current_temperature_topic: 'heat/floorB4E62D44BFFA/3/current'
-    temperature_command_topic: 'heat/floorB4E62D44BFFA/3/target_set'
-    temperature_state_topic: 'heat/floorB4E62D44BFFA/3/target'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    current_temperature_topic: 'heat/floor84F3EB9FC608/3/current'
+    temperature_command_topic: 'heat/floor84F3EB9FC608/3/target_set'
+    temperature_state_topic: 'heat/floor84F3EB9FC608/3/target'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
-    mode_state_topic: 'heat/floorB4E62D44BFFA/3/output'
+    mode_state_topic: 'heat/floor84F3EB9FC608/3/output'
     mode_state_template: >-
       {{ 'heat' if value == 'on' else 'off' }}
     qos: 0
@@ -55,13 +55,13 @@ climate:
     modes:
       - 'off'
       - 'heat'
-    current_temperature_topic: 'heat/floorB4E62D44BFFA/6/current'
-    temperature_command_topic: 'heat/floorB4E62D44BFFA/6/target_set'
-    temperature_state_topic: 'heat/floorB4E62D44BFFA/6/target'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    current_temperature_topic: 'heat/floor84F3EB9FC608/6/current'
+    temperature_command_topic: 'heat/floor84F3EB9FC608/6/target_set'
+    temperature_state_topic: 'heat/floor84F3EB9FC608/6/target'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
-    mode_state_topic: 'heat/floorB4E62D44BFFA/6/output'
+    mode_state_topic: 'heat/floor84F3EB9FC608/6/output'
     mode_state_template: >-
       {{ 'heat' if value == 'on' else 'off' }}
     qos: 0
@@ -69,23 +69,23 @@ climate:
 sensor:
   - platform: mqtt
     name: living_room_temp
-    state_topic: 'heat/floorB4E62D44BFFA/0/current'
+    state_topic: 'heat/floor84F3EB9FC608/0/current'
     unit_of_measurement: '°C'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
   - platform: mqtt
     name: william_temp
-    state_topic: 'heat/floorB4E62D44BFFA/3/current'
+    state_topic: 'heat/floor84F3EB9FC608/3/current'
     unit_of_measurement: '°C'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
   - platform: mqtt
     name: hall_temp
-    state_topic: 'heat/floorB4E62D44BFFA/6/current'
+    state_topic: 'heat/floor84F3EB9FC608/6/current'
     unit_of_measurement: '°C'
-    availability_topic: 'heat/floorB4E62D44BFFA/online'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'
     payload_not_available: 'False'
 
