@@ -5,19 +5,28 @@ ihc:
     auto_setup: false
     info: true
     light:
+      # Stue
       - id: 787549
         name: living_room_spots
         dimmable: True
       - id: 2440539
         name: living_room_glass_cabinet
+      # Køkken
       - id: 2087518
         name: kitchen_table_lamps
+      # Bryggers
+      - id: 2450779
+        name: utility_room_downlight
+      - id: 2452315
+        name: utility_room_table_downlight
+      # Udendørs
       - id: 1911899
         name: outdoor_garden_lamps
       - id: 2174555
         name: outdoor_driveway_spots
       - id: 2404443
         name: outdoor_carport_lamps
+      # Børneværelse 1
       - id: 2207325
         name: william_spots
         dimmable: True
@@ -28,6 +37,8 @@ ihc:
       #- id: 1948506
       #name: hall_pir
       #type: motion
+      - id: 2512402
+        name: all_off
       - id: 1960722
         name: all_off_east
       - id: 2436882
@@ -58,3 +69,77 @@ ihc:
         name: william_bed_lamp_toogle
       - id: 2210908
         name: william_goodnight_toogle
+
+# Automations
+automation:
+- alias: living_room_dinning_table_pendel_up
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_dinning_table_pendel_up
+  action:
+  - service: light.turn_on
+    entity_id: light.living_room_dinning_table_pendel
+    data_template:
+      brightness: '{{states.light.living_room_dinning_table_pendel.attributes.brightness|int + 25}}'
+
+- alias: living_room_dinning_table_pendel_down
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_dinning_table_pendel_down
+  action:
+  - service: light.turn_on
+    entity_id: light.living_room_dinning_table_pendel
+    data_template:
+      brightness: '{{states.light.living_room_dinning_table_pendel.attributes.brightness|int - 25}}'
+
+- alias: living_room_dinning_table_pendel_toggle
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_dinning_table_pendel_toggle
+  action:
+  - service: light.toggle
+    entity_id: light.living_room_dinning_table_pendel
+
+# Living Room / Lamp at TV
+# alias: living_room_lamp_at_tv_up
+# hide_entity: True
+# trigger:
+# - platform: state
+#   entity_id: binary_sensor.living_room_lamp_at_tv_up
+# action:
+# - service: light.turn_on
+#   entity_id: light.living_room_lamp_at_tv
+#   data_template:
+#     brightness: '{{states.light.living_room_lamp_at_tv.attributes.brightness|int + 25}}'
+#
+# alias: living_room_lamp_at_tv_down
+# hide_entity: True
+# trigger:
+# - platform: state
+#   entity_id: binary_sensor.living_room_lamp_at_tv_down
+# action:
+# - service: light.turn_on
+#   entity_id: light.living_room_lamp_at_tv
+#   data_template:
+#     brightness: '{{states.light.living_room_lamp_at_tv.attributes.brightness|int - 25}}'
+
+- alias: living_room_lamp_at_tv_toggle
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_lamp_at_tv_toggle
+  action:
+  - service: light.toggle
+    entity_id: light.living_room_lamp1
+
+- alias: living_room_couch_table_pendel_toggle
+  hide_entity: True
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.living_room_couch_table_pendel_toggle
+  action:
+  - service: light.toggle
+    entity_id: light.living_room_couch_table_pendel

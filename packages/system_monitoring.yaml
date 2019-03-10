@@ -4,6 +4,14 @@ homeassistant:
       friendly_name: 'Database Størrelse'
       icon: 'mdi:database'
 
+binary_sensor:
+  - platform: ping
+    name: ping_ihc_controller
+    host: 10.0.1.4
+  - platform: ping
+    name: ping_hue_bridge
+    host: 10.0.1.5
+
 sensor:
   - platform: uptime
   - platform: sql
