@@ -5,25 +5,34 @@ input_select:
       - Spise
       - Hygge
       - Fra
-    initial: Fra
     icon: mdi:robot
+
+media_player:
+  #- platform: androidtv
+  #  host: 10.0.1.10
+  #  name: living_room_androidtv
+  #  adb_server_ip: 127.0.0.1
+  #  adb_server_port: 5037
+  - platform: kodi
+    name: living_room_kodi
+    host: 10.0.1.11
+    port: 80
+    enable_websocket: false
 
 # Automations
 automation:
 - alias: living_room_hygge_day
   trigger:
-    - platform: sun
-      event: sunrise
+    - platform: state
+      entity_id: sensor.period_of_day
+      to: 'day'
     - platform: state
       entity_id: input_select.living_room_mode
       to: 'Hygge'
   condition:
-    - condition: and  # 'when light' condition: before sunset and after sunrise - equivalent to a state condition on `sun.sun` of `above_horizon`
-      conditions:
-        - condition: sun
-          before: sunset
-        - condition: sun
-          after: sunrise
+    - condition: state
+      entity_id: sensor.period_of_day
+      state: 'day'
     - condition: state
       entity_id: input_select.living_room_mode
       state: 'Hygge'
@@ -33,18 +42,14 @@ automation:
 
 - alias: living_room_hygge_night
   trigger:
-    - platform: sun
-      event: sunset
+    - platform: state
+      entity_id: sensor.period_of_day
     - platform: state
       entity_id: input_select.living_room_mode
       to: 'Hygge'
   condition:
-    - condition: or  # 'when dark' condition: either after sunset or before sunrise - equivalent to a state condition on `sun.sun` of `below_horizon`
-      conditions:
-        - condition: sun
-          after: sunset
-        - condition: sun
-          before: sunrise
+    - condition: template
+      value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
     - condition: state
       entity_id: input_select.living_room_mode
       state: 'Hygge'
@@ -57,8 +62,6 @@ automation:
     - platform: state
       entity_id: binary_sensor.living_room_scene_hygge
   action:
-    #- service: scene.turn_on
-    #  entity_id: scene.hygge
     - service: input_select.select_option
       data:
         entity_id: input_select.living_room_mode

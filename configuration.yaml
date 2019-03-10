@@ -66,6 +66,8 @@ logbook:
   exclude:
     domains:
       - group
+    entities:
+      - binary_sensor.utility_room_occupancy 
 
 # Enables a map showing the location of tracked devices
 map:
@@ -79,6 +81,9 @@ tts:
 
 # Cloud
 cloud:
+
+# System health
+system_health:
 
 # iOS App
 ios:
@@ -131,6 +136,4 @@ hue:
       allow_hue_groups: false
 
 light: !include_dir_merge_list light/
-binary_sensor: !include_dir_merge_list binary_sensor/
-input_boolean: !include input_boolean.yaml
 scene: !include_dir_merge_list scene/
