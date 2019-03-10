@@ -1,27 +1,3 @@
-  - name: Hygge
-    entities:
-      light.living_room_lamp1: on
-      light.living_room_spots:
-        state: on
-        brightness: 64
-      light.living_room_dinning_table_pendel:
-        state: on
-        brightness: 160
-        kelvin: 2600
-        transition: 5
-      light.living_room_couch_table_pendel:
-        state: on
-        brightness: 160
-        kelvin: 2500
-        transition: 5
-      light.living_room_lamp_at_tv:
-        state: on
-        brightness: 160
-        kelvin: 2500
-        transition: 5
-      light.kitchen_table_lamps: on
-      light.living_room_glass_cabinet: on
-
   - name: Spise
     entities:
       light.living_room_lamp1: on

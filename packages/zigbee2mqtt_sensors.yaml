@@ -7,11 +7,8 @@ sensor:
     unit_of_measurement: "°C"
     device_class: temperature
     value_template: "{{ value_json.temperature }}"
-    json_attributes:
-    - linkquality
-    - battery
-    - voltage
     state_topic: zigbee2mqtt/guest_bathroom_temperature
+    #json_attributes_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b882dd_temperature_zigbee2mqtt
   - platform: mqtt
@@ -19,11 +16,8 @@ sensor:
     unit_of_measurement: "%"
     device_class: humidity
     value_template: "{{ value_json.humidity }}"
-    json_attributes:
-    - linkquality
-    - battery
-    - voltage
     state_topic: zigbee2mqtt/guest_bathroom_temperature
+    #json_attributes_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b882dd_humidity_zigbee2mqtt
   - platform: mqtt
@@ -31,11 +25,8 @@ sensor:
     unit_of_measurement: hPa
     device_class: pressure
     value_template: "{{ value_json.pressure }}"
-    json_attributes:
-    - linkquality
-    - battery
-    - voltage
     state_topic: zigbee2mqtt/guest_bathroom_temperature
+    #json_attributes_topic: zigbee2mqtt/guest_bathroom_temperature
     availability_topic: zigbee2mqtt/bridge/state    
     unique_id: 0x00158d0002b882dd_pressure_zigbee2mqtt
   # PIR 1 - Bryggers
@@ -44,11 +35,8 @@ sensor:
     unit_of_measurement: lx
     device_class: illuminance
     value_template: "{{ value_json.illuminance }}"
-    json_attributes:
-    - linkquality
-    - battery
-    - voltage
     state_topic: zigbee2mqtt/utility_room_occupancy
+    #json_attributes_topic: zigbee2mqtt/utility_room_occupancy
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_illuminance_zigbee2mqtt
 
@@ -61,6 +49,7 @@ binary_sensor:
     value_template: "{{ value_json.occupancy }}"
     device_class: motion
     state_topic: zigbee2mqtt/utility_room_occupancy
+    #json_attributes_topic: zigbee2mqtt/utility_room_occupancy
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_occupancy_zigbee2mqtt
   - platform: mqtt
@@ -70,5 +59,6 @@ binary_sensor:
     value_template: "{{ value_json.contact }}"
     device_class: window
     state_topic: zigbee2mqtt/living_room_window
+    #json_attributes_topic: zigbee2mqtt/living_room_window
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002bfe535_contact_zigbee2mqtt

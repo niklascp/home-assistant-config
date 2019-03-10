@@ -11,6 +11,7 @@
       - automation
       - scene
     entities:
+      - binary_sensor.all_off
       - binary_sensor.all_off_east
       - binary_sensor.living_room_scene_cleaning
       - binary_sensor.living_room_scene_spise
