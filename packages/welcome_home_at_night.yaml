@@ -1,0 +1,46 @@
+homeassistant:
+  customize:
+    automation.welcome_home_at_night:
+      friendly_name: 'Velkomst aften'
+
+input_boolean:
+  welcome_home_at_night_active:
+    name: 'Velkomst aften aktiv'
+    initial: off
+
+# Automations
+automation:
+- alias: welcome_home_at_night
+  trigger:
+  - platform: state
+    entity_id: device_tracker.niklas
+    from: 'not_home'
+    to: 'home'
+  - platform: state
+    entity_id: device_tracker.karina
+    from: 'not_home'
+    to: 'home'
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
+  - condition: state
+    entity_id: light.outdoor_driveway_spots
+    state: 'off'
+  - condition: state
+    entity_id: light.living_room_spots
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    data:
+      entity_id: input_boolean.welcome_home_at_night
+  - service: light.turn_on
+    entity_id: light.outdoor_driveway_spots
+  - service: light.turn_on
+    entity_id: light.living_room_spots
+    data_template:
+      brightness: 64
+  - delay: '00:10:00'
+  - service: input_boolean.turn_off
+    data:
+      entity_id: input_boolean.welcome_home_at_night
