@@ -26,7 +26,22 @@
       - binary_sensor.living_room_lamp_at_tv_down
       - binary_sensor.living_room_lamp_at_tv_toggle
       - binary_sensor.william_bed_lamp_toggle
+      # Time and date
       - sensor.time
       - sensor.date
       - sensor.date_time
+      # DMI Multi-time step forecast       
+      - sensor.dmi_precipitation_1h
+      - sensor.dmi_precipitation_2h
+      - sensor.dmi_precipitation_3h
+      - sensor.dmi_temperature_1h
+      - sensor.dmi_temperature_2h
+      - sensor.dmi_temperature_3h
+      - sensor.ibeacon_keychain_1_rssi
+      - sensor.ibeacon_keychain_2_rssi
+      # System monitoring
       - sensor.uptime
+      - sensor.processor_use
+      - sensor.cpu_temp
+      - sensor.memory_use_percent
+      - sensor.disk_use_percent
