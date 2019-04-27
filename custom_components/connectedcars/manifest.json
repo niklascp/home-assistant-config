@@ -1,0 +1,10 @@
+{
+  "domain": "connectedcars",
+  "name": "ConnectedCars",
+  "documentation": "https://www.home-assistant.io/components/connectedcars",
+  "requirements": [
+    "connectedcars==0.1.0"
+  ],
+  "dependencies": [],
+  "codeowners": []
+}
