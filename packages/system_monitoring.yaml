@@ -13,7 +13,32 @@ binary_sensor:
     host: 10.0.1.5
 
 sensor:
+  # Installed hass.io version
+  - platform: version
+    name: Installed Version
+    source: local
+  # Latest Available HA Version
+  - platform: version
+    name: Latest Available Version
+    beta: false
+    image: raspberrypi3
+    source: hassio
+  # Last boot time, Disk, memory & CPU usage
+  - platform: systemmonitor
+    resources:
+      - type: last_boot
+      - type: disk_use_percent
+        arg: /
+      - type: memory_use_percent
+      - type: processor_use
   - platform: uptime
+  # CPU Temperature 
+  - platform: command_line
+    name: CPU Temp
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(0) }}'
+  # Database size
   - platform: sql
     db_url: !secret mariadb_url
     scan_interval: 3600
