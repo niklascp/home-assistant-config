@@ -68,6 +68,7 @@ logbook:
       - group
     entities:
       - binary_sensor.utility_room_occupancy 
+      - binary_sensor.corridor_pir
 
 # Enables a map showing the location of tracked devices
 map:
@@ -134,6 +135,10 @@ hue:
     - host: 10.0.1.5
       allow_unreachable: true
       allow_hue_groups: false
+
+connectedcars:
+  username: !secret connectedcars_username
+  password: !secret connectedcars_password
 
 light: !include_dir_merge_list light/
 scene: !include_dir_merge_list scene/
