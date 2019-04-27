@@ -10,6 +10,8 @@ __pycache__
 !/.gitignore
 tts/
 www/
+esphome/
+deps/
 home-assistant.log
 secrets.yaml
 known_devices.yaml
