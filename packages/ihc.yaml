@@ -14,6 +14,8 @@ ihc:
       # Køkken
       - id: 2087518
         name: kitchen_table_lamps
+        on_id: 2089233
+        off_id: 2089489
       # Bryggers
       - id: 2450779
         name: utility_room_downlight
@@ -34,9 +36,9 @@ ihc:
       - id: 2403675
         name: outdoor_garden
     binary_sensor:
-      #- id: 1948506
-      #name: hall_pir
-      #type: motion
+      - id: 2715154
+        name: corridor_pir
+        type: motion
       - id: 2512402
         name: all_off
       - id: 1960722
