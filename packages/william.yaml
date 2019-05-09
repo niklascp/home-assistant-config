@@ -26,3 +26,18 @@ automation:
     data:
       entity_id: light.william_bed_lamp
       brightness_pct: 15
+
+- alias: 'William / Godnat Program Slut'
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: sensor.period_of_day
+    to: 'day'
+  condition: []
+  action:
+  - service: light.turn_off
+    data:
+      entity_id: light.william_spots
+  - service: light.turn_off
+    data:
+      entity_id: light.william_bed_lamp
