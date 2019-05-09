@@ -89,11 +89,6 @@ system_health:
 # iOS App
 ios:
 
-notify:
-  - name: niklas_s8
-    platform: simplepush
-    device_key: !secret simplepush_niklas_s8_device_key
-
 group: !include groups.yaml
 automation: !include_dir_merge_list automation/
 script: !include scripts.yaml
