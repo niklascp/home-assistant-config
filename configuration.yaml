@@ -124,12 +124,6 @@ device_tracker:
       - device_tracker.karina_iphone  
       - device_tracker.karina_nmap_6s
 
-verisure:
-  username: !secret verisure_username
-  password: !secret verisure_password
-  locks: false
-  mouse: false
-
 hue:
   bridges:
     - host: 10.0.1.5

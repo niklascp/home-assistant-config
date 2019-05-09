@@ -1,4 +1,0 @@
-  # Stue / Lampe ved skænk
-  - platform: switch
-    name: living_room_lamp1
-    entity_id: switch.stue
