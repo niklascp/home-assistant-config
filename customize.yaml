@@ -21,6 +21,7 @@ binary_sensor.hall_pir:
 switch.stue:
   hidden: true
 binary_sensor.all_off_east:
+  friendly_name: IHC Input / Sluk øst
   hidden: true
 light.kitchen:
   friendly_name: Køkken
@@ -38,9 +39,11 @@ zone.dtu:
   friendly_name: DTU
 automation.welcome_home_at_night:
   friendly_name: Velkomst aften
-scene.spise:
+automation.living_room_scene_spise:
+  friendly_name: Spise
   icon: mdi:silverware-variant
-scene.hygge:
+automation.living_room_scene_hygge:
+  friendly_name: Hygge
   icon: mdi:sofa
 light.william_spots:
   friendly_name: William / Spots i loft
@@ -49,10 +52,10 @@ scene.madlavning:
 light.living_room_couch_table_pendel:
   friendly_name: Stue / Pendel over sofabord
 binary_sensor.living_room_scene_hygge:
-  friendly_name: 'IHC Input / Scene: Hygge'
+  friendly_name: IHC Input / Stue / Hygge
   hidden: true
 binary_sensor.living_room_scene_spise:
-  friendly_name: 'IHC Input / Scene: Spise'
+  friendly_name: IHC Input / Stue / Spise
   hidden: true
 binary_sensor.living_room_couch_table_pendel_down:
   friendly_name: IHC Input / Pendel over Sofabord (Fade Ned)
@@ -96,3 +99,35 @@ sensor.bedroom_humidity:
 automation.all_off_east:
   friendly_name: Sluk
   icon: mdi:stop
+media_player.living_room_kodi:
+  friendly_name: Kodi Stue
+  icon: mdi:television
+media_player.living_room_androidtv:
+  icon: mdi:android
+light.utility_room_downlight:
+  friendly_name: Bryggers / Spots
+light.utility_room_table_downlight:
+  friendly_name: Bryggers / Lys u. skabe
+binary_sensor.all_off:
+  friendly_name: IHC Input / Sluk alt
+  hidden: true
+binary_sensor.living_room_scene_cleaning:
+  friendly_name: IHC Input / Stue / Rengøring
+binary_sensor.corridor_pir:
+  friendly_name: Gang / Tilstedeværelse
+device_tracker.connectedcars_140642:
+  friendly_name: Volkswagen Golf
+  icon: mdi:car
+sensor.volkswagen_golf_fuel_level:
+  icon: mdi:gas-station
+scene.living_room_hygge_night:
+  friendly_name: Hygge (Aften)
+scene.living_room_hygge_day:
+  friendly_name: Hygge (Dag)
+scene.living_room_spise_day:
+  friendly_name: Spise (Dag)
+scene.living_room_spise_night:
+  friendly_name: Spise (Aften)
+sensor.living_room_scene:
+  friendly_name: Stue / Scene
+  icon: mdi:palette
