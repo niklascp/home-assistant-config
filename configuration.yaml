@@ -43,6 +43,7 @@ updater:
 discovery:
   ignore:
     - philips_hue
+    - google_cast
 
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
