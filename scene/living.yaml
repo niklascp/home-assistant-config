@@ -1,27 +1,3 @@
-  - name: Spise
-    entities:
-      light.living_room_lamp1: on
-      light.living_room_spots:
-        state: on
-        brightness: 128
-      light.living_room_dinning_table_pendel:
-        state: on
-        brightness: 255
-        kelvin: 3000
-        transition: 5
-      light.living_room_couch_table_pendel:
-        state: on
-        brightness: 180
-        kelvin: 2800
-        transition: 5
-      light.living_room_lamp_at_tv:
-        state: on
-        brightness: 180
-        kelvin: 2800
-        transition: 5
-      #light.kitchen_table_lamps: off
-      light.living_room_glass_cabinet: on
-
   - name: Madlavning
     entities:
       light.kitchen_table_lamps: on      
