@@ -58,9 +58,6 @@ history:
       # Device Trackers
       - device_tracker.niklas
       - device_tracker.karina
-      # Appliances
-      - sensor.washer_status
-      - sensor.dryer_status
       
 # View all events in a logbook
 logbook:
@@ -68,8 +65,15 @@ logbook:
     domains:
       - group
     entities:
+      # Ignore nmap device trackers since they will 
+      # switch a lot between home and not_home.
+      - device_tracker.niklas_nmap_s8
+      - device_tracker.karina_nmap_6s
+      # Ignore motion detectors, since they will 
+      # switch on/off a lot.
       - binary_sensor.utility_room_occupancy 
       - binary_sensor.corridor_pir
+      - binary_sensor.hallway_closet_occupancy
 
 # Enables a map showing the location of tracked devices
 map:
@@ -113,7 +117,6 @@ device_tracker:
   - platform: composite
     name: niklas
     entity_id:
-      - device_tracker.niklas_s8  
       - device_tracker.niklas_s8_gps
       - device_tracker.niklas_nmap_s8  
   - platform: composite
@@ -132,5 +135,4 @@ connectedcars:
   username: !secret connectedcars_username
   password: !secret connectedcars_password
 
-light: !include_dir_merge_list light/
 scene: !include_dir_merge_list scene/
