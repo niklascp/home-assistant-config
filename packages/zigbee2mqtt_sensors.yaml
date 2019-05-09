@@ -39,6 +39,16 @@ sensor:
     #json_attributes_topic: zigbee2mqtt/utility_room_occupancy
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002b8fc1b_illuminance_zigbee2mqtt
+  # PIR 2 - Hallway closet
+  - platform: mqtt
+    name: hallway_closet_illuminance
+    unit_of_measurement: lx
+    device_class: illuminance
+    value_template: "{{ value_json.illuminance }}"
+    state_topic: zigbee2mqtt/hallway_closet_occupancy
+    #json_attributes_topic: "zigbee2mqtt/hallway_closet_occupancy"
+    availability_topic: "zigbee2mqtt/bridge/state"
+    unique_id: 0x00158d0002f2a67d_illuminance_zigbee2mqtt
 
 binary_sensor:
   # PIR 1 - Bryggers
@@ -62,3 +72,14 @@ binary_sensor:
     #json_attributes_topic: zigbee2mqtt/living_room_window
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002bfe535_contact_zigbee2mqtt
+  # PIR 2 - Hallway closet
+  - platform: mqtt
+    name: hallway_closet_occupancy
+    payload_on: true
+    payload_off: false
+    value_template: "{{ value_json.occupancy }}"
+    device_class: "motion"
+    state_topic: zigbee2mqtt/hallway_closet_occupancy
+    #json_attributes_topic: "zigbee2mqtt/hallway_closet_occupancy",
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d0002f2a67d_occupancy_zigbee2mqtt
