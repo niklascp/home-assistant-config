@@ -101,10 +101,12 @@ zone: !include zones.yaml
 
 # MQTT
 mqtt:
-  broker: core-mosquitto
+  # broker: core-mosquitto
+  broker: a0d7b954-mqtt
   username: !secret mqtt_username
   password: !secret mqtt_password
-  
+  client_id: home-assistant
+
 device_tracker:
   - platform: gpslogger
   - platform: nmap_tracker
