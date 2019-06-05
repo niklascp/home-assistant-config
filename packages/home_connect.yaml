@@ -6,63 +6,25 @@ homeassistant:
     sensor.dryer_status:
       friendly_name: Tørretumbler
       icon: mdi:tumble-dryer
-    script.washer_cycle_started:
-      hidden: true
-    script.washer_cycle_finished:
-      hidden: true
-    script.dryer_cycle_started:
-      hidden: true
-    script.dryer_cycle_finished:
-      hidden: true
+
+#homeconnect:
+#  client_id: "87E6954A7EF972807E11C56A3BEFA1B9FBAC0EEA33645FA01CFF906DE73182C6"
+#  client_secret: "76AD2C00E919C741788FF47249E6995D89938C6AAB6A613FB95133BC5C3C7B15"
 
 sensor:
-  - platform: mqtt
-    state_topic: "home_connect/washer"
-    name: washer_status
-    value_template: >-
-      {% if value == 'running' %}
-        Kører
-      {% else %}
-        Færdig
-      {% endif %}
-
-  - platform: mqtt
-    state_topic: "home_connect/dryer"
-    name: dryer_status
-    value_template: >-
-      {% if value == 'running' %}
-        Kører
-      {% else %}
-        Færdig
-      {% endif %}
-
-script:
-  washer_cycle_started:
-    sequence:
-    - service: mqtt.publish
-      data:
-        topic: 'home_connect/washer'
-        payload: 'running'
-        retain: 'true'
-  washer_cycle_finished:
-    sequence:
-    - service: mqtt.publish
-      data:
-        topic: 'home_connect/washer'
-        payload: 'idle'
-        retain: 'true'
-
-  dryer_cycle_started:
-    sequence:
-    - service: mqtt.publish
-      data:
-        topic: 'home_connect/dryer'
-        payload: 'running'
-        retain: 'true'
-  dryer_cycle_finished:
-    sequence:
-    - service: mqtt.publish
-      data:
-        topic: 'home_connect/dryer'
-        payload: 'idle'
-        retain: 'true'
+  - platform: template
+    sensors:
+      washer_status:
+        value_template: >-
+          {% if is_state('switch.washing_machine', 'off') %}
+            Slukket
+          {% else %}
+            Tændt
+          {% endif %}
+      dryer_status:
+        value_template: >-
+          {% if is_state('switch.dryer', 'off') %}
+            Slukket
+          {% else %}
+            Tændt
+          {% endif %}

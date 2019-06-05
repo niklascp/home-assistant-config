@@ -51,6 +51,21 @@ climate:
       {{ 'heat' if value == 'on' else 'off' }}
     qos: 0
   - platform: mqtt
+    name: sophia
+    modes:
+      - 'off'
+      - 'heat'
+    current_temperature_topic: 'heat/floor84F3EB9FC608/4/current'
+    temperature_command_topic: 'heat/floor84F3EB9FC608/4/target_set'
+    temperature_state_topic: 'heat/floor84F3EB9FC608/4/target'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
+    payload_available: 'True'
+    payload_not_available: 'False'
+    mode_state_topic: 'heat/floor84F3EB9FC608/4/output'
+    mode_state_template: >-
+      {{ 'heat' if value == 'on' else 'off' }}
+    qos: 0
+  - platform: mqtt
     name: hall
     modes:
       - 'off'
@@ -77,6 +92,13 @@ sensor:
   - platform: mqtt
     name: william_temp
     state_topic: 'heat/floor84F3EB9FC608/3/current'
+    unit_of_measurement: '°C'
+    availability_topic: 'heat/floor84F3EB9FC608/online'
+    payload_available: 'True'
+    payload_not_available: 'False'
+  - platform: mqtt
+    name: sophia_temp
+    state_topic: 'heat/floor84F3EB9FC608/4/current'
     unit_of_measurement: '°C'
     availability_topic: 'heat/floor84F3EB9FC608/online'
     payload_available: 'True'

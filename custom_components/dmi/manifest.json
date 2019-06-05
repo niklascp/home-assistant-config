@@ -1,0 +1,10 @@
+{
+  "domain": "dmi",
+  "name": "DMI",
+  "documentation": "https://www.home-assistant.io/components/dmi",
+  "requirements": [
+    "dmiapi==0.1.1"
+  ],
+  "dependencies": [],
+  "codeowners": []
+}

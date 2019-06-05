@@ -8,10 +8,38 @@ input_boolean:
     name: 'Velkomst aften aktiv'
     initial: off
 
+proximity:
+  niklas_home: 
+    zone: home
+    devices:
+      - device_tracker.niklas_s8_gps
+    tolerance: 600
+  karina_home: 
+    zone: home
+    devices:
+      - device_tracker.karina_iphone
+    tolerance: 600
+  car_home: 
+    zone: home
+    devices:
+      - device_tracker.connectedcars_140642
+    tolerance: 600
+
 # Automations
 automation:
 - alias: welcome_home_at_night
   trigger:
+  - platform: state
+    entity_id: device_tracker.connectedcars_140642
+    to: 'near_home'
+  - platform: state
+    entity_id: device_tracker.niklas
+    from: 'not_home'
+    to: 'near_home'
+  - platform: state
+    entity_id: device_tracker.karina
+    from: 'not_home'
+    to: 'near_home'
   - platform: state
     entity_id: device_tracker.niklas
     from: 'not_home'

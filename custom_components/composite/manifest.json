@@ -1,0 +1,8 @@
+{
+  "domain": "composite",
+  "name": "Composite Device Tracker",
+  "documentation": "https://www.home-assistant.io/components/composite",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": []
+}

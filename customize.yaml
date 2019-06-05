@@ -131,3 +131,7 @@ scene.living_room_spise_night:
 sensor.living_room_scene:
   friendly_name: Stue / Scene
   icon: mdi:palette
+climate.sophia:
+  friendly_name: Sophia
+sensor.sophia_temp:
+  friendly_name: Sophia / Temp.
