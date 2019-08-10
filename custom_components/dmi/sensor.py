@@ -53,7 +53,7 @@ SENSOR_TYPES = {
     ATTR_WEATHER_HUMIDITY: [
         'Humidity', '%', DEVICE_CLASS_HUMIDITY, 'humidity', '{:.0f}'],
     'precipitation': [
-        'Precipitation', 'mm', None, 'prec50', '{:.1f}']
+        'Precipitation', 'mm', None, 'precip1', '{:.1f}']
 }
 
 PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
