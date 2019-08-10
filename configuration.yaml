@@ -109,7 +109,6 @@ mqtt:
   client_id: home-assistant
 
 device_tracker:
-  - platform: gpslogger
   - platform: nmap_tracker
     interval_seconds: 30
     hosts:
@@ -135,5 +134,4 @@ hue:
 connectedcars:
   username: !secret connectedcars_username
   password: !secret connectedcars_password
-
-scene: !include_dir_merge_list scene/
+  namespace: 'semler:minvolkswagen'
