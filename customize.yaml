@@ -11,6 +11,7 @@ zone.work_ncp:
   friendly_name: Movia
 light.living_room_spots:
   friendly_name: Stue / Spots i loft
+  icon: mdi:spotlight-beam
 light.kitchen_table_lamps:
   friendly_name: Køkken / Lys under skabe
 light.outdoor_garden_lamps:
@@ -47,10 +48,12 @@ automation.living_room_scene_hygge:
   icon: mdi:sofa
 light.william_spots:
   friendly_name: William / Spots i loft
+  icon: mdi:spotlight-beam
 scene.madlavning:
   icon: mdi:pot
 light.living_room_couch_table_pendel:
   friendly_name: Stue / Pendel over sofabord
+  icon: mdi:ceiling-light
 binary_sensor.living_room_scene_hygge:
   friendly_name: IHC Input / Stue / Hygge
   hidden: true
@@ -89,7 +92,8 @@ light.outdoor_carport_lamps:
   friendly_name: Indkørsel / Carport
 light.living_room_glass_cabinet:
   friendly_name: Stue / Lys i glasskab
-scene.rengoring:
+automation.living_room_scene_cleaning:
+  friendly_name: Rengøring
   icon: mdi:broom
 light.living_room_lamp1:
   friendly_name: Stue / Lampe ved skænk
@@ -135,3 +139,16 @@ climate.sophia:
   friendly_name: Sophia
 sensor.sophia_temp:
   friendly_name: Sophia / Temp.
+light.living_room_table_lamp:
+  icon: mdi:lamp
+light.living_room_lamp_at_tv:
+  icon: mdi:floor-lamp
+light.living_room_dinning_table_pendel:
+  icon: mdi:ceiling-light
+light.kitchen_downlight:
+  friendly_name: Køkken / Spots i loft
+  icon: mdi:spotlight-beam
+media_player.kitchen_sonos:
+  icon: mdi:speaker
+binary_sensor.living_room_scene_cooking:
+  friendly_name: IHC Input / Stue / Madlavning
