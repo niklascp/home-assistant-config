@@ -93,6 +93,18 @@ automation:
           entity_id: input_select.living_room_mode
           option: 'Spise'
 
+  - alias: living_room_scene_cooking
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_cooking
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Fra'
+      - service: scene.turn_on
+        entity_id: scene.living_room_cooking
+
   - alias: living_room_scene_cleaning
     trigger:
     - platform: state
@@ -103,7 +115,7 @@ automation:
           entity_id: input_select.living_room_mode
           option: 'Fra'
       - service: scene.turn_on
-        entity_id: scene.rengoring
+        entity_id: scene.living_room_cleaning
 
   - alias: all_off_east
     trigger:
@@ -120,14 +132,15 @@ automation:
           - light.living_room_dinning_table_pendel
           - light.living_room_couch_table_pendel
           - light.living_room_lamp_at_tv
-          - light.living_room_lamp1      
+          - light.living_room_table_lamp      
           - light.living_room_glass_cabinet
+          - light.kitchen_downlight
+          - light.kitchen_table_lamps
 
 # Scenes
 scene:
 - name: living_room_hygge_day
   entities:
-    light.living_room_lamp1: off
     light.living_room_spots: off
     light.living_room_dinning_table_pendel:
       state: on
@@ -139,12 +152,14 @@ scene:
       brightness: 200
       kelvin: 2800
       transition: 5
+    light.living_room_table_lamp: off
     light.living_room_lamp_at_tv: off
     light.living_room_glass_cabinet: off
+    light.kitchen_downlight: off
+    light.kitchen_table_lamps: off
       
 - name: living_room_hygge_night
   entities:
-    light.living_room_lamp1: on
     light.living_room_spots:
       state: on
       brightness_pct: 15
@@ -158,17 +173,24 @@ scene:
       brightness: 160
       kelvin: 2500
       transition: 5
+    light.living_room_table_lamp:
+      state: on
+      brightness: 128
+      kelvin: 2600
+      transition: 5
     light.living_room_lamp_at_tv:
       state: on
       brightness: 128
       kelvin: 2500
       transition: 5
-    light.kitchen_table_lamps: on
-    light.living_room_glass_cabinet: on
+    light.living_room_glass_cabinet: off
+    light.kitchen_downlight:
+      state: on
+      brightness_pct: 15
+    light.kitchen_table_lamps: off
 
 - name: living_room_spise_day
   entities:
-    light.living_room_lamp1: off
     light.living_room_spots: off
     light.living_room_dinning_table_pendel:
       state: on
@@ -176,12 +198,14 @@ scene:
       kelvin: 3000
       transition: 5
     light.living_room_couch_table_pendel: off
+    light.living_room_table_lamp: off
     light.living_room_lamp_at_tv: off
     light.living_room_glass_cabinet: off
+    light.kitchen_downlight: off
+    light.kitchen_table_lamps: off
 
 - name: living_room_spise_night
   entities:
-    light.living_room_lamp1: on
     light.living_room_spots:
       state: on
       brightness_pct: 50
@@ -195,10 +219,56 @@ scene:
       brightness: 180
       kelvin: 2800
       transition: 5
+    light.living_room_table_lamp:
+      state: on
+      brightness: 180
+      kelvin: 2800
+      transition: 5
     light.living_room_lamp_at_tv:
       state: on
       brightness: 180
       kelvin: 2800
       transition: 5
-    #light.kitchen_table_lamps: off
+    light.living_room_glass_cabinet: off
+    light.kitchen_table_lamps: off
+    light.kitchen_downlight: 
+      state: on
+      brightness_pct: 50
+
+- name: living_room_cooking
+  entities:
+    light.kitchen_downlight: 
+      state: on
+      brightness_pct: 100
+    light.kitchen_table_lamps: on      
+
+- name: living_room_cleaning
+  entities:
+    light.living_room_spots:
+      state: on
+      brightness_pct: 100
+    light.living_room_dinning_table_pendel:
+      state: on
+      brightness: 255
+      kelvin: 3000
+      transition: 1
+    light.living_room_couch_table_pendel:
+      state: on
+      brightness: 255
+      kelvin: 3000
+      transition: 1
+    light.living_room_table_lamp:
+      state: on
+      brightness: 255
+      kelvin: 3000
+      transition: 1
+    light.living_room_lamp_at_tv:
+      state: on
+      brightness: 255
+      kelvin: 3000
+      transition: 1
     light.living_room_glass_cabinet: on
+    light.kitchen_downlight: 
+      state: on
+      brightness_pct: 100
+    light.kitchen_table_lamps: on

@@ -16,6 +16,13 @@ ihc:
         name: kitchen_table_lamps
         on_id: 2089233
         off_id: 2089489
+      #- id: 2802270
+      #  name: kitchen_table_lamps #ledigt relæ
+      #  on_id: 2089233
+      #  off_id: 2089489
+      - id: 2842973
+        name: kitchen_downlight
+        dimmable: True
       # Bryggers
       - id: 2450779
         name: utility_room_downlight
@@ -49,6 +56,8 @@ ihc:
         name: living_room_scene_spise
       - id: 2348050
         name: living_room_scene_hygge
+      - id: 2832914
+        name: living_room_scene_cooking
       - id: 2144274
         name: living_room_dinning_table_pendel_up
       - id: 2144530
