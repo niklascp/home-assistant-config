@@ -1,0 +1,15 @@
+sensor:
+  - platform: template
+    sensors:
+      volkswagen_golf_target_odometer:
+        friendly_name: "Volkswagen Golf Target Odometer"
+        unit_of_measurement: 'km'
+        value_template: "{{ ((now().date() - strptime('2019-03-28', '%Y-%m-%d').date()).days * 15000/365) | round(0) }}"
+
+utility_meter:
+  volkswagen_golf_odometer_monthly:
+    source: sensor.volkswagen_golf_odometer
+    cycle: monthly
+  volkswagen_golf_odometer_weeky:
+    source: sensor.volkswagen_golf_odometer
+    cycle: weekly
