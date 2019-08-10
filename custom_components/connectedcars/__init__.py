@@ -14,14 +14,12 @@ from homeassistant.util import Throttle
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import async_track_time_interval
 
-# Home Assistant depends on 3rd party packages for API specific code.
-REQUIREMENTS = ['connectedcars==0.1.0']
-
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'connectedcars'
 SIGNAL_UPDATE_VEHICLE_FORMAT = '{}_update_{}'
 
+CONF_NAMESPACE = 'namespace'
 ATTR_UPDATED = 'updated'
 
 MIN_SCAN_INTERVAL = timedelta(minutes=1)
@@ -31,6 +29,7 @@ CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Required(CONF_PASSWORD): cv.string,
         vol.Required(CONF_USERNAME): cv.string,
+        vol.Required(CONF_NAMESPACE): cv.string,
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): (
             vol.All(cv.time_period, vol.Clamp(min=MIN_SCAN_INTERVAL))),
     }),
@@ -67,7 +66,8 @@ class ConnectedCarsData:
         self._connectedcars = connectedcars
         self.client = connectedcars.ConnectedCarsClient(
             domain_config[CONF_USERNAME],
-            domain_config[CONF_PASSWORD])
+            domain_config[CONF_PASSWORD],
+            domain_config[CONF_NAMESPACE])
 
     async def async_update_overview(self):
         """Update the overview."""
@@ -83,7 +83,7 @@ class ConnectedCarsData:
             raise
 
 class ConnectedCarsEntity(Entity):
-    """Representation of a ConnectedCars fuel level."""
+    """Abstract representation of a ConnectedCars Sensor Entity."""
 
     def __init__(self, vehicle_data, name, unique_id):
         """Initialize the sensor."""
@@ -104,6 +104,11 @@ class ConnectedCarsEntity(Entity):
         _LOGGER.debug("recived signal to update %s", self.entity_id)
         self._vehicle_data = vehicle_data
         self.async_schedule_update_ha_state(False)
+
+    @property
+    def unique_id(self):
+        """Return a unique ID."""
+        return self._unique_id
 
     @property
     def name(self):

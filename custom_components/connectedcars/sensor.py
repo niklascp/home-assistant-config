@@ -3,6 +3,7 @@ import logging
 
 #from homeassistant.consts import VOLUME_LITERS
 from homeassistant.util import dt
+from homeassistant.const import LENGTH_KILOMETERS, VOLUME_LITERS
 
 from . import (DOMAIN, ATTR_UPDATED, ConnectedCarsEntity)
 
@@ -21,6 +22,10 @@ async def async_setup_platform(hass, config, async_add_entities,
 
     sensors.extend([
         ConnectedCarsFuelLevel(vehicle_overview)
+        for vehicle_overview in data.overview])
+
+    sensors.extend([
+        ConnectedCarsOdometer(vehicle_overview)
         for vehicle_overview in data.overview])
 
     async_add_entities(sensors)
@@ -47,4 +52,28 @@ class ConnectedCarsFuelLevel(ConnectedCarsEntity):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement of this entity."""
-        return "L"
+        return VOLUME_LITERS 
+
+class ConnectedCarsOdometer(ConnectedCarsEntity):
+    """Representation of a ConnectedCars odometer."""
+
+    def __init__(self, _vehicle_data):
+        """Initialize the sensor."""
+        super().__init__(_vehicle_data, "Odometer", "odometer")
+
+    @property
+    def state(self):
+        """Return the state of the device."""
+        return self._vehicle_data.odometer.odometer
+
+    @property
+    def device_state_attributes(self):
+        """Return the state attributes."""
+        return {
+            ATTR_UPDATED: dt.as_local(self._vehicle_data.odometer.time)
+        }
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement of this entity."""
+        return LENGTH_KILOMETERS
