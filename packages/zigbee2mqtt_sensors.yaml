@@ -72,6 +72,16 @@ binary_sensor:
     #json_attributes_topic: zigbee2mqtt/living_room_window
     availability_topic: zigbee2mqtt/bridge/state
     unique_id: 0x00158d0002bfe535_contact_zigbee2mqtt
+  - platform: mqtt
+    name: sophia_window
+    payload_on: false
+    payload_off: true
+    value_template: "{{ value_json.contact }}"
+    device_class: window
+    state_topic: zigbee2mqtt/sophia_window
+    #json_attributes_topic: zigbee2mqtt/living_room_window
+    availability_topic: zigbee2mqtt/bridge/state
+    unique_id: 0x00158d00031cd0d5_contact_zigbee2mqtt
   # PIR 2 - Hallway closet
   - platform: mqtt
     name: hallway_closet_occupancy
