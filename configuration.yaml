@@ -96,7 +96,7 @@ system_health:
 ios:
 
 group: !include groups.yaml
-automation: !include_dir_merge_list automation/
+automation: !include automations.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
 
@@ -131,7 +131,10 @@ hue:
       allow_unreachable: true
       allow_hue_groups: false
 
-connectedcars:
-  username: !secret connectedcars_username
-  password: !secret connectedcars_password
-  namespace: 'semler:minvolkswagen'
+# HTML5 Push Notification
+notify:
+  - platform: html5
+    name: html5
+    vapid_pub_key: !secret vapid_pub_key
+    vapid_prv_key: !secret vapid_prv_key
+    vapid_email: !secret vapid_email

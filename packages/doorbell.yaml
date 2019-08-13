@@ -1,0 +1,32 @@
+automation:
+- alias: doorbell
+  trigger: []
+  condition: []
+  action:
+  - service: notify.html5
+    data:
+      title: Dørklokke
+      message: Det ringer på døren
+  # Play doorbell sound on sonos.
+  - service: sonos.snapshot
+    data:
+      entity_id: media_player.kitchen_sonos
+      with_group: yes
+  - service: sonos.unjoin
+    data:
+      entity_id: media_player.kitchen_sonos
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.kitchen_sonos
+      volume_level: 0.45
+  - service: media_player.play_media
+    data_template:
+      entity_id: 'media_player.kitchen_sonos'
+      media_content_id: 'https://{{states("sensor.base_url")}}/local/doorbell.mp3'
+      media_content_type: 'music'
+  - delay:
+      seconds: 8
+  - service: sonos.restore
+    data:
+      entity_id: media_player.kitchen_sonos
+      with_group: yes

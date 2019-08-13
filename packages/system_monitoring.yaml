@@ -13,6 +13,11 @@ binary_sensor:
     host: 10.0.1.5
 
 sensor:
+  # This is also usefull for using the base url in templates.
+  - platform: template
+    sensors:
+      base_url:
+        value_template: !secret http_base_url
   # Installed hass.io version
   - platform: version
     name: Installed Version

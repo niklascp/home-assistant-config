@@ -1,0 +1,34 @@
+- id: '1565609378293'
+  alias: notify_car_near_home
+  trigger:
+  - entity_id: device_tracker.connectedcars_140642
+    event: enter
+    platform: zone
+    zone: zone.near_home
+  condition: []
+  action:
+  - data:
+      message: Bil er næsten hjemme.
+    service: notify.html5
+- id: '1565609695612'
+  alias: alarm_notify_away_disarmed_niklas
+  trigger:
+  - entity_id: group.family
+    for: 00:10:00
+    from: home
+    platform: state
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.jens_bornos_vej_alarm
+    state: disarmed
+  action:
+  - data:
+      data:
+        actions:
+        - action: arm_away
+          title: Tikoble ude
+      message: Der ser ikke ud til der er nogen personer i huset, men alermen er ikke
+        tilkoblet.
+      title: Alarm ej tikoblet
+    service: notify.html5
