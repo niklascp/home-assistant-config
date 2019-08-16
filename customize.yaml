@@ -152,3 +152,6 @@ media_player.kitchen_sonos:
   icon: mdi:speaker
 binary_sensor.living_room_scene_cooking:
   friendly_name: IHC Input / Stue / Madlavning
+light.sophia_spots:
+  friendly_name: Sophia / Downlight
+  icon: mdi:spotlight-beam

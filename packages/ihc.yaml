@@ -39,6 +39,9 @@ ihc:
       - id: 2207325
         name: william_spots
         dimmable: True
+      - id: 2985821
+        name: sophia_spots
+        dimmable: True
     switch:
       - id: 2403675
         name: outdoor_garden
