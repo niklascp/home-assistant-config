@@ -1,0 +1,106 @@
+light:
+  - platform: group
+    name: corridor_spots
+    entities:
+      - light.corridor_spot_1
+      - light.corridor_spot_2
+      - light.corridor_spot_3
+
+input_boolean:
+  corridor_sleep_mode:
+    name: Godnat gang
+    icon: mdi:sleep
+  corridor_night_light:
+    name: Gang / Konstant nattelys
+    icon: mdi:weather-night
+
+# Automations
+automation:
+  - alias: corridor_spots_sleep_mode_on
+    description: Gang / Tænder natlys ved aktivering af nat, nattelys eller bevægelse
+    trigger:
+      - platform: state
+        entity_id: input_boolean.corridor_sleep_mode
+        to: 'on'
+      - platform: state
+        entity_id: input_boolean.corridor_night_light
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.corridor_occupancy
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: input_boolean.corridor_sleep_mode
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion
+        state: 'off'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.corridor_spots
+      - service: light.turn_on
+        data:
+          entity_id: light.corridor_spot_2
+          kelvin: 6500
+          brightness_pct: 1
+  - alias: corridor_spots_sleep_mode_on_auto_off
+    description: Gang / Slukker natlys efter endt bevægelse (anvendes ikke hvis nattelys er tændt)
+    trigger:
+      - platform: state
+        entity_id: input_boolean.corridor_sleep_mode
+        to: 'on'
+        for: '00:03:00'
+      - platform: state
+        entity_id: binary_sensor.corridor_occupancy
+        to: 'off'
+        for: '00:03:00'
+    condition:
+      - condition: state
+        entity_id: input_boolean.corridor_sleep_mode
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.corridor_night_light
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion
+        state: 'off'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.corridor_spots
+  - alias: corridor_spots_auto_on
+    description: Gang / Tænder lys ved skumring
+    trigger:
+      - platform: state
+        entity_id: sensor.day_night
+        to: 'night'
+      - platform: state
+        entity_id: input_boolean.corridor_sleep_mode
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: sensor.day_night
+        state: 'night'
+      - condition: state
+        entity_id: input_boolean.corridor_sleep_mode
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.corridor_spots
+          kelvin: 2800
+          brightness_pct: 50
+  - alias: corridor_spots_auto_off
+    description: Gang / Slukker lys ved skumring frafald
+    trigger:
+      - platform: state
+        entity_id: sensor.day_night
+        to: 'day'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.corridor_spots
+      - service: input_boolean.turn_off
+        data:
+          entity_id: input_boolean.corridor_sleep_mode

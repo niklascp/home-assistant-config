@@ -1,0 +1,95 @@
+input_boolean:
+  vacation_mode:
+    name: Hjemmesimulering
+    icon: mdi:beach
+
+automation:
+# Simulates comming home from work
+- alias: vacation_mode_home
+  trigger:
+    - platform: time
+      at: '16:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state:  'on'
+  action:
+    - delay: '00:{{ (range(0, 15) | random) }}'
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Spise'
+    - delay: '00:{{ (range(0, 5) | random) }}'
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.sophia_spots
+        brightness_pct: 65
+    - delay: '00:{{ (range(0, 5) | random) }}'
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.william_spots
+        brightness_pct: 65
+# Simulates cooking (takes max 1 hours)
+- alias: vacation_mode_kitchen
+  trigger:
+    - platform: time
+      at: '06:00'
+    - platform: time
+      at: '16:45'
+  condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state:  'on'
+  action:
+    - delay: '00:{{ (range(0, 15) | random) }}'
+    - service: homeassistant.turn_on
+      data:
+        entity_id: scene.living_room_cooking
+    - delay: '00:30'
+    - delay: '00:{{ (range(0, 15) | random) }}'
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Spise'
+# Simulates putting kids to bed
+- alias: vacation_mode_kids_bedtime
+  trigger:
+    - platform: time
+      at: '19:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state:  'on'
+  action:
+    - delay: '00:{{ (range(0, 30) | random) }}'
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.william_spots      
+    - service: homeassistant.turn_on
+      data:
+        entity_id: light.william_bed_lamp
+    - delay: '00:{{ (range(0, 5) | random) }}'
+    - service: homeassistant.turn_off
+      data:
+        entity_id: light.sophia_spots
+    - delay: '00:{{ (range(0, 5) | random) }}'
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.living_room_mode
+        option: 'Hygge'
+# Simulates all of when going to work/to bed
+- alias: vacation_mode_all_off
+  trigger:
+    - platform: time
+      at: "07:30"
+    - platform: time
+      at: "22:00"
+  condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state:  'on'
+  action:
+    - delay: '00:{{ (range(0, 30) | random) }}'
+    - service: automation.trigger
+      data:
+        entity_id: automation.all_off_east

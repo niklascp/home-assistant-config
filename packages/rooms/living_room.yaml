@@ -1,0 +1,168 @@
+input_select:
+  living_room_mode:
+    name: Stue / Program
+    options:
+      - Spise
+      - Hygge
+      - Fra
+    icon: mdi:robot
+
+sensor:
+- platform: template
+  sensors:
+    living_room_target_brightness:
+      friendly_name: "Stue / Mållysstyrke"
+      unit_of_measurement: "%"
+      value_template: >
+        {% set lux = states('sensor.sun_illuminance_south_lux') | float %}
+        {% set min_lux = 50 %}
+        {% set half_lux = 1000 %}
+        {% if lux < min_lux %}
+          100
+        {% else %}
+          {{ (100 * 1/(1+((lux-min_lux)/(half_lux-min_lux))**2)) | round }}
+        {% endif %}
+      icon_template: mdi:brightness-percent
+    living_room_target_brightness_10min_max:
+      friendly_name: "Stue / Mållysstyrke (10min, max)"
+      unit_of_measurement: "%"
+      value_template: "{{state_attr('sensor.living_room_target_brightness_10min', 'max_value')}}"
+- platform: statistics
+  name: living_room_target_brightness_10min
+  entity_id: sensor.living_room_target_brightness
+  sampling_size: 1000
+  precision: 0
+  max_age:
+    minutes: 10
+# Automations
+automation:
+  # This automation listen for changes in living_room_mode and day_light_mode and publishes a matching scene to mqtt.
+  - alias: living_room_scene_control
+    trigger:
+      - platform: state
+        entity_id: input_select.living_room_mode
+    action:
+      - service: mqtt.publish
+        data_template:
+          topic: living_room/scene
+          retain: true
+          payload: >
+            {% set script = 'script.living_room_' + states('input_select.living_room_mode').lower() %}
+            {% if is_state(script, 'off') -%}
+              {{ script }}
+            {%- else -%}
+              off
+            {%- endif %}
+
+  # This automation actually sets the scene.
+  - alias: living_room_scene_set
+    trigger:
+      - platform: mqtt
+        topic: living_room/scene
+    condition:
+      - condition: template
+        value_template: "{{ states(trigger.payload) != 'unknown' }}"
+    action:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: "{{ trigger.payload }}"
+
+  # The following automations are just hooks for IHC push buttons.
+  - alias: living_room_scene_hygge
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.living_room_scene_hygge
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Hygge'
+
+  - alias: living_room_scene_dinning_short_press
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_dinning_short_press
+      to: 'on'
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Spise'
+
+  - alias: living_room_scene_dinning_long_press
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_dinning_long_press
+      to: 'on'
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Spise'
+      - service: automation.trigger
+        data:
+          entity_id: automation.living_room_scene_control
+      - service: light.turn_off
+        entity_id:
+          - light.kitchen_table_lamps
+
+  - alias: living_room_scene_cooking
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_cooking
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Fra'
+      - service: script.turn_on
+        entity_id: script.living_room_cooking
+
+  - alias: living_room_scene_cleaning
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_scene_cleaning
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Fra'
+      - service: script.turn_on
+        entity_id: script.living_room_cleaning
+
+  - alias: all_off_east
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.all_off_east
+        to: 'on'
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Fra'
+      - service: light.turn_off
+        entity_id:
+          - light.living_room_spots
+          - light.living_room_dinning_table_pendel
+          - light.living_room_couch_table_pendel
+          - light.living_room_lamp_at_tv
+          - light.living_room_table_lamp      
+          - light.living_room_glass_cabinet
+          - light.kitchen_downlight
+          - light.kitchen_table_lamps
+
+  - alias: sleep_mode_activate_on_all_off_east
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.all_off_east
+        to: 'on'
+    condition:
+      - condition: time
+        after: '21:30:00'
+        before: '04:00:00'
+    action:
+      - service: input_boolean.turn_on
+        data:
+          entity_id:
+            - input_boolean.sleep_mode
+            - input_boolean.corridor_sleep_mode

@@ -1,0 +1,43 @@
+homeassistant:
+  customize:
+    automation.utility_room_light_turnon:
+      friendly_name: 'Bryggers / Lysstyring / Tænd'
+    automation.utility_room_light_turnoff:
+      friendly_name: 'Bryggers / Lysstyring / Sluk'
+
+input_boolean:
+  utility_room_light_manual_override:
+    name: 'Bryggers / Manuel lysstyring'
+    initial: off
+
+# Automations
+automation:
+- alias: utility_room_light_turnon
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.utility_room_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.welcome_home_at_night_active
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.utility_room_light_manual_override
+    state: 'off'
+  action:
+  - service: light.turn_on
+    entity_id: light.utility_room_downlight
+
+- alias: utility_room_light_turnoff
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.utility_room_occupancy
+    to: 'off'
+    for: '00:00:30'
+  condition:
+  - condition: state
+    entity_id: input_boolean.utility_room_light_manual_override
+    state: 'off'
+  action:
+  - service: light.turn_off
+    entity_id: light.utility_room_downlight

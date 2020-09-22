@@ -4,8 +4,8 @@ verisure:
   locks: false
   mouse: false
 
-light:
+#light:
   # Stue / Lampe ved skænk
-  - platform: switch
-    name: living_room_lamp1
-    entity_id: switch.stue
+  #- platform: switch
+  #  name: living_room_lamp1
+  #  entity_id: switch.stue

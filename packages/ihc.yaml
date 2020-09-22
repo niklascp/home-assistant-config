@@ -37,6 +37,8 @@ ihc:
         name: outdoor_garden_lamps
       - id: 2174555
         name: outdoor_driveway_spots
+        on_id: 2176273
+        off_id: 2176529
       - id: 2404443
         name: outdoor_carport_lamps
       # Børneværelse 1 - William
