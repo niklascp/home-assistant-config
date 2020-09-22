@@ -64,7 +64,7 @@ class ConnectedCarsOdometer(ConnectedCarsEntity):
     @property
     def state(self):
         """Return the state of the device."""
-        return self._vehicle_data.odometer.odometer
+        return int(self._vehicle_data.odometer.odometer)
 
     @property
     def device_state_attributes(self):

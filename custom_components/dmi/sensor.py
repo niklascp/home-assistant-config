@@ -24,9 +24,6 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import (async_track_utc_time_change,
                                          async_call_later)
 
-# Home Assistant depends on 3rd party packages for API specific code.
-REQUIREMENTS = ['dmiapi==0.1.1']
-
 _LOGGER = logging.getLogger(__name__)
 
 ATTR_LOCATION = 'location'

@@ -73,7 +73,7 @@ class ConnectedCarsData:
         """Update the overview."""
         try:
             _LOGGER.debug("Updating vehicles overview")
-            self.overview = await self.client.async_vehicles_overview()
+            self.overview = await self.client.async_vehicles_overview(timeout = 120)
             for vehicle in self.overview:
                 signal = SIGNAL_UPDATE_VEHICLE_FORMAT.format(DOMAIN, vehicle.id)
                 self.vehicles[vehicle.id] = vehicle
