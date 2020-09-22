@@ -1,12 +1,23 @@
 automation:
 - alias: doorbell
-  trigger: []
-  condition: []
+  trigger:
+    platform: mqtt
+    topic: rfbridge-01/rfin
+  condition:
+    condition: template
+    value_template: "{{ trigger.payload[12:18] == '92E9BD' }}"
   action:
-  - service: notify.html5
+  # Disable this automation
+  - service: automation.turn_off
+    entity_id: automation.doorbell
+  - service: notify.telegram_niklas
+    data_template:
+      title: '*Dørklokke*'
+      message: "Det ringer på døren..."
+  - service: camera.snapshot
     data:
-      title: Dørklokke
-      message: Det ringer på døren
+      entity_id: camera.outdoor_driveway_generic
+      filename: '/config/www/tmp/snapshot.jpg'
   # Play doorbell sound on sonos.
   - service: sonos.snapshot
     data:
@@ -30,3 +41,14 @@ automation:
     data:
       entity_id: media_player.kitchen_sonos
       with_group: yes
+  - service: notify.telegram_niklas
+    data_template:
+      title: '*Dørklokke*'
+      message: "Det ringer på døren..."
+      data:
+        photo:
+          - file: /config/www/tmp/snapshot.jpg
+  - delay:
+      seconds: 2
+  - service: automation.turn_on
+    entity_id: automation.doorbell

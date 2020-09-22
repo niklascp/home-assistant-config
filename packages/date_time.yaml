@@ -1,48 +1,166 @@
+input_select:
+  day_light_mode:
+    name: Dag/nat (med skumring/daggry)
+    options:
+      - Nat
+      - Dag
+      - Skumring/daggry
+    icon: mdi:theme-light-dark
+
+input_boolean:
+  auto_day_light_mode:
+    name: Skift dag/nat automatisk
+    icon: mdi:robot
+  sleep_mode:
+    name: Godnat hus
+    icon: mdi:sleep
+  deactivate_sleep_mode_on_motion:
+    name: Opvågning ved bevægelse
+    icon: mdi:weather-sunset-up
+
+input_number:
+  day_light_mode_dusk_elevation:
+    name: 'Skift til skumring'
+    icon: mdi:weather-sunset-down 
+    min: -18
+    max: 18
+    step: 1
+  day_light_mode_night_elevation:
+    name: 'Skift til nat'
+    icon: mdi:weather-night 
+    min: -18
+    max: 18
+    step: 1
+  day_light_mode_dawn_elevation:
+    name: 'Skift til daggry'
+    icon: mdi:weather-sunset-up 
+    min: -18
+    max: 18
+    step: 1
+  day_light_mode_day_elevation:
+    name: 'Skift til dag'
+    icon: mdi:weather-sunny 
+    min: -18
+    max: 18
+    step: 1
+
+binary_sensor:
+  - platform: workday
+    country: DK
+
 sensor:
-  - platform: time_date
-    display_options:
-      - 'time'
-      - 'date'
-      - 'date_time'
   - platform: template
     sensors:
-      period_of_day:
+      day_light_mode:
         friendly_name: 'Dag/nat (med skumring/daggry)'
         value_template: >-
-          {% if states.sun.sun.attributes.rising and -6 <= states.sun.sun.attributes.elevation and states.sun.sun.attributes.elevation < 3 %}
-            dusk
-          {% elif not states.sun.sun.attributes.rising and -6 <= states.sun.sun.attributes.elevation and states.sun.sun.attributes.elevation < 3 %}
-            dawn
-          {% elif states.sun.sun.attributes.elevation < -6 %}
-            night
-          {% else %}
+          {% if is_state('input_select.day_light_mode', 'Skumring/daggry') %}
+            twilight
+          {% elif is_state('input_select.day_light_mode', 'Dag') %}
             day
+          {% else %}
+            night
           {% endif %}
         icon_template: >-
-          {% if states.sun.sun.attributes.rising and -6 <= states.sun.sun.attributes.elevation and states.sun.sun.attributes.elevation < 3 %}
+          {% if is_state('input_select.day_light_mode', 'Skumring/daggry') %}
             mdi:weather-sunset-down
-          {% elif not states.sun.sun.attributes.rising and -6 <= states.sun.sun.attributes.elevation and states.sun.sun.attributes.elevation < 3 %}
-            mdi:weather-sunset-up
-          {% elif states.sun.sun.attributes.elevation < -6 %}
-            mdi:weather-night
-          {% else %}
+          {% elif is_state('input_select.day_light_mode', 'Dag') %}
             mdi:weather-sunny
+          {% else %}
+            mdi:weather-night
           {% endif %}
       day_night:
         friendly_name: 'Dag/nat'
         value_template: >-
-          {% if states.sun.sun.attributes.rising and states.sun.sun.attributes.elevation < 3 %}
+          {% if is_state('input_select.day_light_mode', 'Skumring/daggry') %}
             night
-          {% elif not states.sun.sun.attributes.rising and states.sun.sun.attributes.elevation < 3 %}
-            night
-          {% else %}
+          {% elif is_state('input_select.day_light_mode', 'Dag') %}
             day
+          {% else %}
+            night
           {% endif %}
         icon_template: >-
-          {% if states.sun.sun.attributes.rising and states.sun.sun.attributes.elevation < 3 %}
+          {% if is_state('input_select.day_light_mode', 'Skumring/daggry') %}
             mdi:weather-night
-          {% elif not states.sun.sun.attributes.rising and states.sun.sun.attributes.elevation < 3 %}
-            mdi:weather-night
-          {% else %}
+          {% elif is_state('input_select.day_light_mode', 'Dag') %}
             mdi:weather-sunny
+          {% else %}
+            mdi:weather-night
           {% endif %}
+
+# Automations
+automation:
+  - alias: auto_day_light_mode
+    trigger:
+      platform: time_pattern
+      minutes: "/1"
+    condition:
+      condition: state
+      entity_id: input_boolean.auto_day_light_mode
+      state: 'on'
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.day_light_mode
+          option: >-
+            {% if state_attr('sun.sun', 'rising')
+                  and states('input_number.day_light_mode_dawn_elevation') | int <= state_attr('sun.sun', 'elevation')
+                  and states('input_number.day_light_mode_day_elevation') | int > state_attr('sun.sun', 'elevation') %}
+              Skumring/daggry
+            {% elif not state_attr('sun.sun', 'rising')
+                    and states('input_number.day_light_mode_dusk_elevation') | int >= state_attr('sun.sun', 'elevation')
+                    and states('input_number.day_light_mode_night_elevation') | int < state_attr('sun.sun', 'elevation') %}
+              Skumring/daggry
+            {% elif state_attr('sun.sun', 'rising') 
+                      and states('input_number.day_light_mode_dawn_elevation') | int > state_attr('sun.sun', 'elevation')
+                    or not state_attr('sun.sun', 'rising')
+                      and states('input_number.day_light_mode_night_elevation') | int >= state_attr('sun.sun', 'elevation') %}
+              Nat
+            {% else %}
+              Dag
+            {% endif %}
+  - alias: deactivate_sleep_mode_on_motion_on_workday
+    trigger: 
+      - platform: time
+        at: '06:30:00'
+    condition:
+      - condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: 'on'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion
+  - alias: deactivate_sleep_mode_on_motion_on_weekend
+    trigger: 
+      - platform: time
+        at: '08:00:00'
+    condition:
+      - condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: 'off'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion
+  - alias: deactivate_sleep_mode_off
+    trigger: 
+      - platform: time
+        at: '12:00:00'
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion        
+  - alias: sleep_mode_deactivate_by_motion
+    description: 'Turns off sleep_mode when motion is detected and house is in "wake up mode" (deactivate_sleep_mode_on_motion is on)'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.corridor_occupancy
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: input_boolean.deactivate_sleep_mode_on_motion
+        state: 'on'
+    action:
+      - service: input_boolean.turn_off
+        data:
+          entity_id:
+            - input_boolean.sleep_mode
+            - input_boolean.corridor_sleep_mode

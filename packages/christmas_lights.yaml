@@ -2,18 +2,11 @@ homeassistant:
   customize:
     group.christmas_lights:
       friendly_name: 'Julelys'
-    light.outdoor_christmas_lights_garden:
-      friendly_name: 'Have / Julelys'
 
 group:
   christmas_lights:
-    - light.outdoor_christmas_lights_garden
-    - light.outdoor_carport_lamps
-
-light:
-  - platform: switch
-    name: outdoor_christmas_lights_garden
-    entity_id: switch.outdoor_garden
+    - switch.outdoor_garden
+    - switch.outdoor_christmas_light_driveway
 
 input_boolean:
   christmas_light:
@@ -43,7 +36,7 @@ automation:
     entity_id: input_boolean.christmas_light
     state: 'on'
   action:
-    service: light.turn_on
+    service: homeassistant.turn_on
     entity_id: group.christmas_lights
 - alias: outdoor_christmas_lights_off
   trigger:
@@ -57,5 +50,5 @@ automation:
     entity_id: input_boolean.christmas_light
     state: 'on'
   action:
-    service: light.turn_off
+    service: homeassistant.turn_off
     entity_id: group.christmas_lights

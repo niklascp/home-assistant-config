@@ -12,19 +12,24 @@ homeassistant:
 #  client_secret: "76AD2C00E919C741788FF47249E6995D89938C6AAB6A613FB95133BC5C3C7B15"
 
 sensor:
-  - platform: template
-    sensors:
-      washer_status:
-        value_template: >-
-          {% if is_state('switch.washing_machine', 'off') %}
-            Slukket
-          {% else %}
-            Tændt
-          {% endif %}
-      dryer_status:
-        value_template: >-
-          {% if is_state('switch.dryer', 'off') %}
-            Slukket
-          {% else %}
-            Tændt
-          {% endif %}
+  - platform: mqtt
+    name: washer_status
+    state_topic: "home_connect/washer/status"
+  - platform: mqtt
+    name: dryer_status
+    state_topic: "home_connect/dryer/status"
+
+automation:
+  - alias: ifttt_home_connect
+    trigger:
+      platform: event
+      event_type: ifttt_webhook_received
+      event_data:
+        source: home_connect
+    action:
+      - service: mqtt.publish
+        data_template:
+          topic: 'home_connect/{{trigger.event.data.device}}/status'
+          payload: '{{trigger.event.data.status}}'
+          retain: true
+

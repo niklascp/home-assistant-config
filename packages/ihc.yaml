@@ -5,6 +5,10 @@ ihc:
     auto_setup: false
     info: true
     light:
+      # Entré
+      - id: 3140957
+        name: hallway_downlight
+        dimmable: True
       # Stue
       - id: 787549
         name: living_room_spots
@@ -27,7 +31,7 @@ ihc:
       - id: 2450779
         name: utility_room_downlight
       - id: 2452315
-        name: utility_room_table_downlight
+        name: utility_room_table_light_mains
       # Udendørs
       - id: 1911899
         name: outdoor_garden_lamps
@@ -35,29 +39,52 @@ ihc:
         name: outdoor_driveway_spots
       - id: 2404443
         name: outdoor_carport_lamps
-      # Børneværelse 1
+      # Børneværelse 1 - William
       - id: 2207325
         name: william_spots
         dimmable: True
+      # Børneværelse 2 - Sophia
       - id: 2985821
         name: sophia_spots
+        dimmable: True
+      # Kontor (Vær. 4)
+      - id: 4056157
+        name: office_spots
         dimmable: True
     switch:
       - id: 2403675
         name: outdoor_garden
+      - id: 3152657
+        name: ihc_hallway_night_mode
+      - id: 3153169
+        name: ihc_hallway_dark_mode
+      - id: 3153425
+        name: ihc_hallway_manual_mode
+      # Børneværelse 1 - Sophia
+      - id: 2993937
+        name: ihc_sophia_sleep_mode
     binary_sensor:
       - id: 2715154
-        name: corridor_pir
+        name: corridor_occupancy
+        type: motion
+      - id: 3126106
+        name: hallway_occupancy
         type: motion
       - id: 2512402
         name: all_off
       - id: 1960722
         name: all_off_east
-      - id: 2436882
+      - id: 3813906
+        name: utility_room_table_light_on
+      - id: 3843346
+        name: utility_room_table_light_off
+      - id: 3628562
         name: living_room_scene_cleaning
-      - id: 2350354
-        name: living_room_scene_spise
-      - id: 2348050
+      - id: 3872786
+        name: living_room_scene_dinning_short_press
+      - id: 3751186
+        name: living_room_scene_dinning_long_press
+      - id: 3615762
         name: living_room_scene_hygge
       - id: 2832914
         name: living_room_scene_cooking
@@ -79,15 +106,22 @@ ihc:
         name: living_room_lamp_at_tv_down
       - id: 2151186
         name: living_room_lamp_at_tv_toggle
+      # Børneværelse 1 - William
       - id: 2210652
         name: william_bed_lamp_toogle
       - id: 2210908
         name: william_goodnight_toogle
+      # Børneværelse 2 - Sophia
+      - id: 3127314
+        name: ihc_sophia_bed_lamp_toogle
+      - id: 3992594
+        name: ihc_sophia_goodnight_start
+      - id: 4021010
+        name: ihc_sophia_goodnight_stop
 
 # Automations
 automation:
 - alias: living_room_dinning_table_pendel_up
-  hide_entity: True
   trigger:
   - platform: state
     entity_id: binary_sensor.living_room_dinning_table_pendel_up
@@ -98,7 +132,6 @@ automation:
       brightness: '{{states.light.living_room_dinning_table_pendel.attributes.brightness|int + 25}}'
 
 - alias: living_room_dinning_table_pendel_down
-  hide_entity: True
   trigger:
   - platform: state
     entity_id: binary_sensor.living_room_dinning_table_pendel_down
@@ -109,7 +142,6 @@ automation:
       brightness: '{{states.light.living_room_dinning_table_pendel.attributes.brightness|int - 25}}'
 
 - alias: living_room_dinning_table_pendel_toggle
-  hide_entity: True
   trigger:
   - platform: state
     entity_id: binary_sensor.living_room_dinning_table_pendel_toggle
@@ -119,7 +151,6 @@ automation:
 
 # Living Room / Lamp at TV
 # alias: living_room_lamp_at_tv_up
-# hide_entity: True
 # trigger:
 # - platform: state
 #   entity_id: binary_sensor.living_room_lamp_at_tv_up
@@ -130,7 +161,6 @@ automation:
 #     brightness: '{{states.light.living_room_lamp_at_tv.attributes.brightness|int + 25}}'
 #
 # alias: living_room_lamp_at_tv_down
-# hide_entity: True
 # trigger:
 # - platform: state
 #   entity_id: binary_sensor.living_room_lamp_at_tv_down
@@ -141,19 +171,53 @@ automation:
 #     brightness: '{{states.light.living_room_lamp_at_tv.attributes.brightness|int - 25}}'
 
 - alias: living_room_lamp_at_tv_toggle
-  hide_entity: True
   trigger:
   - platform: state
     entity_id: binary_sensor.living_room_lamp_at_tv_toggle
   action:
   - service: light.toggle
-    entity_id: light.living_room_lamp1
+    entity_id: light.living_room_lamp_at_tv
 
 - alias: living_room_couch_table_pendel_toggle
-  hide_entity: True
   trigger:
   - platform: state
     entity_id: binary_sensor.living_room_couch_table_pendel_toggle
   action:
   - service: light.toggle
     entity_id: light.living_room_couch_table_pendel
+
+- alias: ihc_follow_day
+  trigger:
+  - platform: state
+    entity_id: sensor.day_night
+    to: 'day'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.ihc_hallway_dark_mode
+
+- alias: ihc_follow_night
+  trigger:
+  - platform: state
+    entity_id: sensor.day_night
+    to: 'night'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.ihc_hallway_dark_mode
+
+- alias: ihc_follow_sleep_on
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleep_mode
+    to: 'on'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.ihc_hallway_night_mode
+
+- alias: ihc_follow_sleep_off
+  trigger:
+  - platform: state
+    entity_id: input_boolean.sleep_mode
+    to: 'off'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.ihc_hallway_night_mode

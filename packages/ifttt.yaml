@@ -3,14 +3,9 @@ automation:
     trigger:
       platform: event
       event_type: ifttt_webhook_received
-      event_data:
-        action: call_service
     action:
-      service: logbook.log
-      data:
-        name: "IFTTT Webhook_Received: "
-        message: >
-          {{trigger.event.data}}
-      #service_template: '{{ trigger.event.data.service }}'
-    #data_template:
-    #  entity_id: '{{ trigger.event.data.entity_id }}'
+      - service: logbook.log
+        data_template:
+          name: "IFTTT Webhook Received: "
+          message: >
+            {{trigger.event.data}}

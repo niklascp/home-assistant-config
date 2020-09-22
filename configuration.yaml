@@ -5,11 +5,13 @@ homeassistant:
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 0
+  elevation: 41
   # metric for Metric, imperial for Imperial
   unit_system: metric
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: !secret time_zone
+  external_url: !secret http_base_url
+  internal_url: "http://homeassistant.local:8123"
   # Customization file
   customize: !include customize.yaml
   packages:  !include_dir_named packages
@@ -23,18 +25,10 @@ frontend:
 config:
 
 http:
-  # Secrets are defined in the file secrets.yaml
-  # api_password: !secret http_password
-  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  base_url: !secret http_base_url
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
 
 # Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
   # Optional, allows Home Assistant developers to focus on popular components.
   # include_used_components: true
@@ -65,14 +59,15 @@ logbook:
     domains:
       - group
     entities:
-      # Ignore nmap device trackers since they will 
+      # Exclude nmap device trackers since they will 
       # switch a lot between home and not_home.
       - device_tracker.niklas_nmap_s8
       - device_tracker.karina_nmap_6s
-      # Ignore motion detectors, since they will 
+      # Exclude motion detectors, since they will 
       # switch on/off a lot.
       - binary_sensor.utility_room_occupancy 
-      - binary_sensor.corridor_pir
+      - binary_sensor.corridor_occupancy
+      - binary_sensor.hallway_occupancy
       - binary_sensor.hallway_closet_occupancy
 
 # Enables a map showing the location of tracked devices
@@ -92,13 +87,22 @@ cloud:
 # System health
 system_health:
 
-# iOS App
-ios:
+# iOS and Android App
+mobile_app:
+
+# 
+media_source:
 
 group: !include groups.yaml
 automation: !include automations.yaml
+scene: !include scenes.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
+input_boolean:
+input_datetime:
+input_text:
+input_number:
+input_select:
 
 # MQTT
 mqtt:
@@ -107,6 +111,7 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
   client_id: home-assistant
+  discovery: true
 
 device_tracker:
   - platform: nmap_tracker
@@ -125,16 +130,23 @@ device_tracker:
       - device_tracker.karina_iphone  
       - device_tracker.karina_nmap_6s
 
-hue:
-  bridges:
-    - host: 10.0.1.5
-      allow_unreachable: true
-      allow_hue_groups: false
+stream:
 
-# HTML5 Push Notification
-notify:
-  - platform: html5
-    name: html5
-    vapid_pub_key: !secret vapid_pub_key
-    vapid_prv_key: !secret vapid_prv_key
-    vapid_email: !secret vapid_email
+camera:
+  #- platform: onvif
+  #  name: outdoor_driveway
+  #  host: 10.0.1.31
+  #  port: 80
+  #  profile: 1
+  #  username: !secret camara_username
+  #  password: !secret camara_password
+  #- platform: ffmpeg
+  #  name: "Driveway Camera"
+  #  input: -rtsp_transport tcp -i rtsp://admin:cam4ME!!@10.0.1.31:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif
+  - platform: generic
+    name: "outdoor_driveway_generic"
+    authentication: digest
+    username: !secret camara_username
+    password: !secret camara_password
+    still_image_url: http://10.0.1.31/cgi-bin/snapshot.cgi
+    stream_source: rtsp://admin:cam4ME!!@10.0.1.31:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif

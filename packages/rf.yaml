@@ -1,15 +1,9 @@
 homeassistant:
   customize:
-    binary_sensor.william_window:
-      friendly_name: 'William / Vindue'
     binary_sensor.bedroom_window:
       friendly_name: 'Sovevær. / Vindue'
 
 binary_sensor:
-  - platform: mqtt
-    name: william_window
-    state_topic: 'home-assistant/william/window'
-    device_class: window
   - platform: mqtt
     name: bedroom_window
     state_topic: 'home-assistant/bedroom/window'
@@ -18,19 +12,6 @@ binary_sensor:
 # These automations just republish states as retained messages
 # when receiving raw input from RF-bridge.
 automation:
-  - alias: rf_william_window
-    trigger:
-      platform: mqtt
-      topic: rfbridge-01/rfin
-    condition:
-      condition: template
-      value_template: "{{ trigger.payload[12:16] == '14B5' and trigger.payload[16:18] in ['0A', '0E'] }}"
-    action:
-      - service: mqtt.publish
-        data_template:
-          topic: 'home-assistant/william/window'
-          payload: "{{ 'ON' if trigger.payload[-2:] == '0A' else 'OFF' }}"
-          retain: true
   - alias: rf_bedroom_window
     trigger:
       platform: mqtt

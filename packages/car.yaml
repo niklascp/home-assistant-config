@@ -19,3 +19,22 @@ utility_meter:
   volkswagen_golf_odometer_weeky:
     source: sensor.volkswagen_golf_odometer
     cycle: weekly
+
+automation:
+- alias: notify_car_near_home
+  trigger:
+  - entity_id: device_tracker.connectedcars_140642
+    event: enter
+    platform: zone
+    zone: zone.near_home
+  action:
+  - service: notify.telegram_niklas
+    data:
+      message: "*Bil er næsten hjemme*"
+  - service: notify.telegram_niklas
+    data_template:
+      message: Bil
+      data:
+        location:
+          latitude: "{{state_attr('device_tracker.connectedcars_140642', 'latitude')}}"
+          longitude: "{{state_attr('device_tracker.connectedcars_140642', 'longitude')}}"

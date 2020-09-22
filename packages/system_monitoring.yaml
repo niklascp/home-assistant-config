@@ -4,6 +4,11 @@ homeassistant:
       friendly_name: 'Database Størrelse'
       icon: 'mdi:database'
 
+input_boolean:
+  daily_snapshot:
+    name: Create and upload daily snapshots
+    icon: mdi:cloud-upload
+
 binary_sensor:
   - platform: ping
     name: ping_ihc_controller
@@ -18,6 +23,8 @@ sensor:
     sensors:
       base_url:
         value_template: !secret http_base_url
+      ha_token:
+        value_template: !secret ha_token
   # Installed hass.io version
   - platform: version
     name: Installed Version
@@ -26,7 +33,7 @@ sensor:
   - platform: version
     name: Latest Available Version
     beta: false
-    image: raspberrypi3
+    image: qemux86-64
     source: hassio
   # Last boot time, Disk, memory & CPU usage
   - platform: systemmonitor
@@ -38,9 +45,9 @@ sensor:
       - type: processor_use
   - platform: uptime
   # CPU Temperature 
-  - platform: command_line
+  - platform: mqtt
+    state_topic: system/nuc/temp
     name: CPU Temp
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(0) }}'
   # Database size
@@ -52,3 +59,40 @@ sensor:
         query: "select round(sum(data_length + index_length) / 1024 / 1024, 1) as db_size from information_schema.tables WHERE table_schema='homeassistant'"
         column: db_size
         unit_of_measurement: MB
+
+automation:
+  - alias: Daily snapshot
+    trigger:
+      platform: time
+      at: '03:15:00'
+    condition:
+      condition: state
+      entity_id: input_boolean.daily_snapshot
+      state: 'on'
+    action:
+      service: hassio.snapshot_partial
+      data_template:
+        name: snapshot_{{ now().strftime('%Y-%m-%d') }}
+        addons:
+          - 15ef4d2f_esphome
+          - 7ad98f9c_zigbee2mqtt
+          - a0d7b954_appdaemon
+          - a0d7b954_motioneye
+          - a0d7b954_mqtt
+          - core_duckdns
+          #- core_mosquitto
+          - core_samba
+        folders:
+          - homeassistant
+          #- share # Disabled due to Motion Eye
+          - ssl
+          - addons_local
+  - alias: 'system_boot_notification'
+    trigger:
+    - event: start
+      platform: homeassistant
+    action:
+    - service: notify.telegram_niklas
+      data:
+        title: "*System Monitoring*"
+        message: Home Assistant has started.

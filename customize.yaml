@@ -16,9 +16,6 @@ light.kitchen_table_lamps:
   friendly_name: Køkken / Lys under skabe
 light.outdoor_garden_lamps:
   friendly_name: Have / Terrasse
-binary_sensor.hall_pir:
-  friendly_name: Gang / Pir
-  hidden: true
 switch.stue:
   hidden: true
 binary_sensor.all_off_east:
@@ -36,11 +33,12 @@ binary_sensor.ping_hue_bridge:
   friendly_name: HUE Bridge
 light.outdoor_driveway_spots:
   friendly_name: Indkørsel / Spots i udhæng
+  icon: mdi:spotlight-beam
 zone.dtu:
   friendly_name: DTU
 automation.welcome_home_at_night:
   friendly_name: Velkomst aften
-automation.living_room_scene_spise:
+automation.living_room_scene_dinning_short_press:
   friendly_name: Spise
   icon: mdi:silverware-variant
 automation.living_room_scene_hygge:
@@ -56,13 +54,12 @@ light.living_room_couch_table_pendel:
   icon: mdi:ceiling-light
 binary_sensor.living_room_scene_hygge:
   friendly_name: IHC Input / Stue / Hygge
-  hidden: true
-binary_sensor.living_room_scene_spise:
-  friendly_name: IHC Input / Stue / Spise
-  hidden: true
+binary_sensor.living_room_scene_dinning_short_press:
+  friendly_name: IHC Input / Stue / Spise (Kort tryk)
+binary_sensor.living_room_scene_dinning_long_press:
+  friendly_name: IHC Input / Stue / Spise (Langt tryk)
 binary_sensor.living_room_couch_table_pendel_down:
   friendly_name: IHC Input / Pendel over Sofabord (Fade Ned)
-  hidden: true
 binary_sensor.living_room_couch_table_pendel_toggle:
   friendly_name: IHC Input / Pendel over Sofabord (Kip)
   hidden: true
@@ -117,7 +114,7 @@ binary_sensor.all_off:
   hidden: true
 binary_sensor.living_room_scene_cleaning:
   friendly_name: IHC Input / Stue / Rengøring
-binary_sensor.corridor_pir:
+binary_sensor.corridor_occupancy:
   friendly_name: Gang / Tilstedeværelse
 device_tracker.connectedcars_140642:
   friendly_name: Volkswagen Golf
@@ -155,3 +152,29 @@ binary_sensor.living_room_scene_cooking:
 light.sophia_spots:
   friendly_name: Sophia / Downlight
   icon: mdi:spotlight-beam
+camera.outdoor_driveway_generic:
+  friendly_name: Udendørs / Indkørsel
+binary_sensor.hallway_occupancy:
+  friendly_name: Entré / Tilstedeværelse
+light.hallway_downlight:
+  friendly_name: Entré / Downlight
+switch.ihc_hallway_night_mode:
+  friendly_name: Entré / Godnat
+  icon: mdi:sleep
+switch.ihc_hallway_dark_mode:
+  friendly_name: Entré / Skumring
+  icon: mdi:theme-light-dark
+switch.ihc_hallway_manual_mode:
+  friendly_name: Entré / Manual lysstyring
+  icon: mdi:alpha-m-circle
+binary_sensor.sophia_window:
+  device_class: window
+binary_sensor.living_room_window:
+  device_class: window
+light.corridor_spots:
+  friendly_name: Gang / Spots
+  icon: mdi:spotlight-beam
+alarm_control_panel.jens_bornos_vej_alarm:
+  friendly_name: Alarm
+light.office_spots:
+  friendly_name: Kontor / Spots

@@ -26,11 +26,7 @@
       - binary_sensor.living_room_lamp_at_tv_down
       - binary_sensor.living_room_lamp_at_tv_toggle
       - binary_sensor.william_bed_lamp_toggle
-      # Time and date
-      - sensor.time
-      - sensor.date
-      - sensor.date_time
-      # DMI Multi-time step forecast       
+      # DMI Multi-time step forecast
       - sensor.dmi_precipitation_1h
       - sensor.dmi_precipitation_2h
       - sensor.dmi_precipitation_3h

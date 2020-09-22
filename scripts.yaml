@@ -1,0 +1,89 @@
+'living_room_hygge':
+  alias: living_room_hygge
+  sequence:
+  - data:
+      brightness_pct: 15
+    entity_id: light.living_room_spots
+    service: light.turn_on
+  - data:
+      brightness_pct: 15
+    entity_id: light.kitchen_downlight
+    service: light.turn_on
+  - data:
+      brightness_pct: 30
+      transition: 5
+    entity_id: light.living_room_dinning_table_pendel
+    service: light.turn_on
+  - data:
+      brightness_pct: 50
+      transition: 5
+    entity_id: light.living_room_couch_table_pendel
+    service: light.turn_on
+  - data:
+      brightness_pct: 50
+      transition: 5
+    entity_id: light.living_room_table_lamp
+    service: light.turn_on
+  - data:
+      brightness_pct: 50
+      transition: 5
+    entity_id: light.living_room_lamp_at_tv
+    service: light.turn_on
+  - entity_id: light.kitchen_table_lamps
+    service: light.turn_off
+
+'living_room_spise':
+  alias: living_room_spise
+  sequence:
+  - data:
+      brightness_pct: 50
+    entity_id: light.living_room_spots
+    service: light.turn_on
+  - data:
+      brightness_pct: 50
+    entity_id: light.kitchen_downlight
+    service: light.turn_on
+  - data:
+      brightness_pct: 100
+      transition: 5
+    entity_id: light.living_room_dinning_table_pendel
+    service: light.turn_on
+  - data:
+      brightness_pct: 70
+      transition: 5
+    entity_id: light.living_room_couch_table_pendel
+    service: light.turn_on
+  - data:
+      brightness_pct: 70
+      transition: 5
+    entity_id: light.living_room_table_lamp
+    service: light.turn_on
+  - data:
+      brightness_pct: 70
+      transition: 5
+    entity_id: light.living_room_lamp_at_tv
+    service: light.turn_on
+
+'living_room_cleaning':
+  sequence:
+  - service: light.turn_on
+    entity_id:
+      - light.living_room_spots
+      - light.kitchen_downlight
+      - light.living_room_dinning_table_pendel
+      - light.living_room_couch_table_pendel
+      - light.living_room_table_lamp
+      - light.living_room_lamp_at_tv
+    data:
+      brightness_pct: 100
+      transition: 0
+
+'living_room_cooking':
+  sequence:
+  - service: light.turn_on
+    entity_id:
+      - light.kitchen_downlight
+      - light.kitchen_table_lamps
+    data:
+      brightness_pct: 100
+      transition: 0

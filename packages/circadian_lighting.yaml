@@ -1,0 +1,28 @@
+circadian_lighting:
+  max_colortemp: 3300
+
+switch:
+  - platform: circadian_lighting
+    name: hallway_circadian_lighting
+    lights_ct:
+      - light.hallway_closet_led_panel
+    min_brightness: 30
+  - platform: circadian_lighting
+    name: corridor
+    lights_ct:
+      - light.corridor_spot_1
+      - light.corridor_spot_2
+      - light.corridor_spot_3
+    max_brightness: 65
+    sleep_entity: input_boolean.corridor_sleep_mode
+    sleep_state: 'on'
+    sleep_colortemp: 6500
+    sleep_brightness: 1
+  - platform: circadian_lighting
+    name: living_room_circadian_lighting
+    lights_ct:
+      - light.living_room_couch_table_pendel
+      - light.living_room_dinning_table_pendel
+      - light.living_room_lamp_at_tv
+      - light.living_room_table_lamp
+    disable_brightness_adjust: True

@@ -1,15 +1,3 @@
-- id: '1565609378293'
-  alias: notify_car_near_home
-  trigger:
-  - entity_id: device_tracker.connectedcars_140642
-    event: enter
-    platform: zone
-    zone: zone.near_home
-  condition: []
-  action:
-  - data:
-      message: Bil er næsten hjemme.
-    service: notify.html5
 - id: '1565609695612'
   alias: alarm_notify_away_disarmed_niklas
   trigger:
@@ -25,10 +13,304 @@
   action:
   - data:
       data:
-        actions:
-        - action: arm_away
-          title: Tikoble ude
+        inline_keyboard:
+        - Tikoble ude:/arm_away, Ignorer:/dismiss
       message: Der ser ikke ud til der er nogen personer i huset, men alermen er ikke
         tilkoblet.
-      title: Alarm ej tikoblet
-    service: notify.html5
+      title: '*Alarm ej tikoblet*'
+    service: notify.telegram_niklas
+- id: '1575669623652'
+  alias: all_off
+  description: Slukker alt indelys, og tænder lys i indkørsel i 10 minutter hvis mørkt
+  trigger:
+  - entity_id: binary_sensor.all_off
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id:
+      - light.kitchen_downlight
+      - light.kitchen_table_lamps
+      - light.living_room_spots
+      - light.living_room_dinning_table_pendel
+      - light.living_room_couch_table_pendel
+      - light.living_room_lamp_at_tv
+      - light.living_room_table_lamp
+      - light.living_room_glass_cabinet
+      - light.utility_room_table_light
+      - light.corridor_spots
+      - light.hallway_downlight
+      - light.william_bed_lamp
+      - light.william_spots
+      - light.sophia_bed_lamp
+      - light.sophia_spots
+    service: homeassistant.turn_off
+  - data:
+      option: Fra
+    entity_id: input_select.living_room_mode
+    service: input_select.select_option
+  - condition: state
+    entity_id: sensor.day_night
+    state: night
+  - data:
+      ihc_id: 2176017
+    entity_id: light.outdoor_driveway_spots
+    service: ihc.pulse
+- id: '1578147796704'
+  alias: hallway_closet_on
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.hallway_closet_occupancy
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - brightness_pct: 100
+    device_id: 6562e7ccde44490793da876d7ea03589
+    domain: light
+    entity_id: light.hallway_closet_led_panel
+    type: turn_on
+  mode: single
+- id: '1578148039240'
+  alias: hallway_closet_off
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.hallway_closet_occupancy
+    for: 00:00:30
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - device_id: 6562e7ccde44490793da876d7ea03589
+    domain: light
+    entity_id: light.hallway_closet_led_panel
+    type: turn_off
+- id: '1579361543060'
+  alias: sophia_sleep_mode_on
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.ihc_sophia_goodnight_start
+    platform: state
+    to: 'on'
+  - at: '19:00'
+    platform: time
+  condition: []
+  action:
+  - entity_id: switch.ihc_sophia_sleep_mode
+    service: switch.turn_on
+  - brightness_pct: 25
+    device_id: 95db12aab78f4f6c9055834c5f41fbca
+    domain: light
+    entity_id: light.sophia_bed_lamp
+    type: turn_on
+  - data: {}
+    entity_id: light.sophia_spots
+    service: light.turn_off
+- id: '1579361605420'
+  alias: sophia_sleep_mode_off
+  description: ''
+  trigger:
+  - at: 07:00
+    platform: time
+  - entity_id: binary_sensor.ihc_sophia_goodnight_stop
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - entity_id: switch.ihc_sophia_sleep_mode
+    service: switch.turn_off
+- id: '1581175287613'
+  alias: sophia_bed_lamp_toogle_on
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.ihc_sophia_bed_lamp_toogle
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.sophia_bed_lamp
+    state: 'off'
+  action:
+  - data:
+      brightness_pct: 25
+    entity_id: light.sophia_bed_lamp
+    service: light.turn_on
+- id: '1581239039910'
+  alias: corridor_spots_toggle
+  description: ''
+  trigger:
+  - entity_id: sensor.xiaomi_button_01_click
+    platform: state
+    to: single
+  condition: []
+  action:
+  - entity_id: light.corridor_spots
+    service: light.toggle
+- id: '1581337746207'
+  alias: sophia_bed_lamp_toogle_off
+  description: Sluk Sengelampe (Hvis tændt)
+  trigger:
+  - entity_id: binary_sensor.ihc_sophia_bed_lamp_toogle
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.sophia_bed_lamp
+    state: 'on'
+  action:
+  - entity_id: light.sophia_bed_lamp
+    service: light.turn_off
+- id: '1581761391770'
+  alias: corridor_spots_sleep_mode_toggle
+  description: ''
+  trigger:
+  - platform: mqtt
+    topic: zigbee2mqtt/0x00158d000424cd00
+  condition:
+  - condition: template
+    value_template: '{{ "hold" == trigger.payload_json.action }}'
+  action:
+  - entity_id: input_boolean.corridor_sleep_mode
+    service: input_boolean.toggle
+- id: '1584307470667'
+  alias: Udendørs / Tænd spots ved døråbning
+  description: Tænder udelys (spots i udhæng) når en af dørene åbnes.
+  trigger:
+  - entity_id: binary_sensor.utility_room_door_contact
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.front_door_contact
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sensor.day_light_mode
+    state: night
+  - condition: state
+    entity_id: input_boolean.welcome_home_at_night_active
+    state: 'off'
+  action:
+  - data:
+      ihc_id: 2176017
+    service: ihc.pulse
+- id: '1584869219598'
+  alias: William / Climate off when window open
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.william_window
+    for: 00:01
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      hvac_mode: 'off'
+    entity_id: climate.william
+    service: climate.set_hvac_mode
+- id: '1584869307336'
+  alias: William / Climate heat when window close
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.william_window
+    for: 00:05
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      hvac_mode: heat
+    entity_id: climate.william
+    service: climate.set_hvac_mode
+- id: '1584870531319'
+  alias: Sophia / Climate off when window open
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.sophia_window
+    for: 00:01
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      hvac_mode: 'off'
+    entity_id: climate.sophia
+    service: climate.set_hvac_mode
+- id: '1584870587700'
+  alias: Sophia / Climate heat when window close
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.sophia_window
+    for: 00:05
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      hvac_mode: heat
+    entity_id: climate.sophia
+    service: climate.set_hvac_mode
+- id: '1584981169287'
+  alias: Bryggers / Vandlækage
+  description: ''
+  trigger:
+  - device_id: 258eccf55f5c4c02bf47228e1ddb3e48
+    domain: binary_sensor
+    entity_id: binary_sensor.utility_room_water_leak
+    platform: device
+    type: moist
+  condition: []
+  action:
+  - data:
+      message: Vandlækage i bryggers!
+      title: Alarm
+    service: notify.telegram_niklas
+- id: '1586774175973'
+  alias: Bryggers / Lys under skabe / Lysstyring (Tænd)
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.utility_room_table_light_on
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - device_id: 716570a6eb884b418cd7ce060c44e982
+    domain: light
+    entity_id: light.utility_room_table_light
+    type: turn_on
+- id: '1586774239550'
+  alias: Bryggers / Lys under skabe / Lysstyring (Sluk)
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.utility_room_table_light_off
+    platform: state
+    to: 'on'
+  - device_id: 0923b24cc0d844b3a95017cfa56710f0
+    domain: binary_sensor
+    entity_id: binary_sensor.utility_room_occupancy
+    for:
+      hours: 0
+      minutes: 15
+      seconds: 0
+    platform: device
+    type: no_motion
+  condition: []
+  action:
+  - device_id: 716570a6eb884b418cd7ce060c44e982
+    domain: light
+    entity_id: light.utility_room_table_light
+    type: turn_off
+- id: '1598003536624'
+  alias: alarm_warn_fridge_door_open
+  description: Giver en advarsel hvis fryseren står åbent
+  trigger: []
+  condition: []
+  action:
+  - data:
+      text: Fryseren står åbent
+    service: script.warning_say
+  - data:
+      message: 'ADVARSEL: Fryseren står åbent!'
+    service: notify.mobile_app_niklas_samsung_s8
+  mode: single
