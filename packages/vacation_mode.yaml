@@ -8,23 +8,23 @@ automation:
 - alias: vacation_mode_home
   trigger:
     - platform: time
-      at: '16:00'
+      at: '16:00:00'
   condition:
     - condition: state
       entity_id: input_boolean.vacation_mode
       state:  'on'
   action:
-    - delay: '00:{{ (range(0, 15) | random) }}'
+    - delay: '00:{{ (range(0, 15) | random) }}:00'
     - service: input_select.select_option
       data:
         entity_id: input_select.living_room_mode
         option: 'Spise'
-    - delay: '00:{{ (range(0, 5) | random) }}'
+    - delay: '00:{{ (range(0, 5) | random) }}:00'
     - service: homeassistant.turn_on
       data:
         entity_id: light.sophia_spots
         brightness_pct: 65
-    - delay: '00:{{ (range(0, 5) | random) }}'
+    - delay: '00:{{ (range(0, 5) | random) }}:00'
     - service: homeassistant.turn_on
       data:
         entity_id: light.william_spots
@@ -33,20 +33,20 @@ automation:
 - alias: vacation_mode_kitchen
   trigger:
     - platform: time
-      at: '06:00'
+      at: '06:00:00'
     - platform: time
-      at: '16:45'
+      at: '16:45:00'
   condition:
     - condition: state
       entity_id: input_boolean.vacation_mode
       state:  'on'
   action:
-    - delay: '00:{{ (range(0, 15) | random) }}'
+    - delay: '00:{{ (range(0, 15) | random) }}:00'
     - service: homeassistant.turn_on
       data:
         entity_id: scene.living_room_cooking
     - delay: '00:30'
-    - delay: '00:{{ (range(0, 15) | random) }}'
+    - delay: '00:{{ (range(0, 15) | random) }}:00'
     - service: input_select.select_option
       data:
         entity_id: input_select.living_room_mode
@@ -55,24 +55,24 @@ automation:
 - alias: vacation_mode_kids_bedtime
   trigger:
     - platform: time
-      at: '19:00'
+      at: '19:00:00'
   condition:
     - condition: state
       entity_id: input_boolean.vacation_mode
       state:  'on'
   action:
-    - delay: '00:{{ (range(0, 30) | random) }}'
+    - delay: '00:{{ (range(0, 30) | random) }}:00'
     - service: homeassistant.turn_off
       data:
         entity_id: light.william_spots      
     - service: homeassistant.turn_on
       data:
         entity_id: light.william_bed_lamp
-    - delay: '00:{{ (range(0, 5) | random) }}'
+    - delay: '00:{{ (range(0, 5) | random) }}:00'
     - service: homeassistant.turn_off
       data:
         entity_id: light.sophia_spots
-    - delay: '00:{{ (range(0, 5) | random) }}'
+    - delay: '00:{{ (range(0, 5) | random) }}:00'
     - service: input_select.select_option
       data:
         entity_id: input_select.living_room_mode
@@ -81,15 +81,15 @@ automation:
 - alias: vacation_mode_all_off
   trigger:
     - platform: time
-      at: "07:30"
+      at: "07:30:00"
     - platform: time
-      at: "22:00"
+      at: "22:00:00"
   condition:
     - condition: state
       entity_id: input_boolean.vacation_mode
       state:  'on'
   action:
-    - delay: '00:{{ (range(0, 30) | random) }}'
+    - delay: '00:{{ (range(0, 30) | random) }}:00'
     - service: automation.trigger
       data:
         entity_id: automation.all_off_east
