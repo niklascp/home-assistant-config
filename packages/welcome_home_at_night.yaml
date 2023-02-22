@@ -2,36 +2,37 @@ homeassistant:
   customize:
     automation.welcome_home_at_night:
       friendly_name: 'Velkomst aften'
+    binary_sensor.driveway_doors:
+      friendly_name: 'Døre mod indkørsel (Bryggers og Hoveddør)'  
 
 input_boolean:
   welcome_home_at_night_active:
     name: 'Velkomst aften aktiv'
     initial: off
 
+binary_sensor:
+  - name: driveway_doors
+    platform: group
+    entities:
+      - binary_sensor.front_door_contact
+      - binary_sensor.utility_room_door_contact
+
 # Automations
 automation:
 - alias: welcome_home_at_night
   trigger:
-  - platform: state
-    entity_id: device_tracker.connectedcars_140642
-    to: 'near_home'
-  - platform: state
-    entity_id: device_tracker.niklas
-    from: 'not_home'
-    to: 'near_home'
-  - platform: state
-    entity_id: device_tracker.karina
-    from: 'not_home'
-    to: 'near_home'
-  - platform: state
-    entity_id: device_tracker.niklas
-    from: 'not_home'
-    to: 'home'
-  - platform: state
-    entity_id: device_tracker.karina
-    from: 'not_home'
-    to: 'home'
+  - platform: zone
+    entity_id: device_tracker.niklas_mobile
+    zone: zone.near_home
+    event: enter
+  - platform: zone
+    entity_id: device_tracker.karinas_iphone_12
+    zone: zone.near_home
+    event: enter
   condition:
+  - condition: state
+    entity_id: group.family
+    state: not_home
   - condition: state
     entity_id: sun.sun
     state: 'below_horizon'
@@ -39,7 +40,7 @@ automation:
     entity_id: light.outdoor_driveway_spots
     state: 'off'
   - condition: state
-    entity_id: light.living_room_spots
+    entity_id: input_boolean.welcome_home_at_night_active
     state: 'off'
   action:
   - service: input_boolean.turn_on
@@ -51,6 +52,13 @@ automation:
     entity_id: light.living_room_spots
     data_template:
       brightness: 64
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.utility_room_door_contact
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.front_door_contact
+      to: 'on'
   - delay: '00:10:00'
   - service: light.turn_off
     entity_id: light.outdoor_driveway_spots
