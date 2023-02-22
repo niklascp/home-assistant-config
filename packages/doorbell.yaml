@@ -1,54 +1,50 @@
 automation:
-- alias: doorbell
-  trigger:
-    platform: mqtt
-    topic: rfbridge-01/rfin
-  condition:
-    condition: template
-    value_template: "{{ trigger.payload[12:18] == '92E9BD' }}"
-  action:
-  # Disable this automation
-  - service: automation.turn_off
-    entity_id: automation.doorbell
-  - service: notify.telegram_niklas
-    data_template:
-      title: '*Dørklokke*'
-      message: "Det ringer på døren..."
-  - service: camera.snapshot
-    data:
-      entity_id: camera.outdoor_driveway_generic
-      filename: '/config/www/tmp/snapshot.jpg'
-  # Play doorbell sound on sonos.
-  - service: sonos.snapshot
-    data:
-      entity_id: media_player.kitchen_sonos
-      with_group: yes
-  - service: sonos.unjoin
-    data:
-      entity_id: media_player.kitchen_sonos
-  - service: media_player.volume_set
-    data:
-      entity_id: media_player.kitchen_sonos
-      volume_level: 0.45
-  - service: media_player.play_media
-    data_template:
-      entity_id: 'media_player.kitchen_sonos'
-      media_content_id: 'https://{{states("sensor.base_url")}}/local/doorbell.mp3'
-      media_content_type: 'music'
-  - delay:
-      seconds: 8
-  - service: sonos.restore
-    data:
-      entity_id: media_player.kitchen_sonos
-      with_group: yes
-  - service: notify.telegram_niklas
-    data_template:
-      title: '*Dørklokke*'
-      message: "Det ringer på døren..."
-      data:
-        photo:
-          - file: /config/www/tmp/snapshot.jpg
-  - delay:
-      seconds: 2
-  - service: automation.turn_on
-    entity_id: automation.doorbell
+  - alias: doorbell
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.doorbell_contact
+      from: "on"
+      to: "off"
+    action:
+      # Disable this automation
+      - service: notify.telegram_niklas
+        data:
+          title: "*Dørklokke*"
+          message: "Det ringer på døren..."
+      - service: camera.snapshot
+        data:
+          entity_id: camera.ds01_driveway
+          filename: "/config/www/tmp/snapshot.jpg"
+      # Play doorbell sound on sonos.
+      - service: sonos.snapshot
+        data:
+          entity_id: media_player.kitchen_sonos
+          with_group: yes
+      - service: media_player.unjoin
+        data:
+          entity_id: media_player.kitchen_sonos
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.kitchen_sonos
+          volume_level: 0.45
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.kitchen_sonos
+          media_content_id: '{{states("sensor.base_url")}}local/doorbell.mp3'
+          media_content_type: music
+      - delay:
+          seconds: 8
+      - service: sonos.restore
+        data:
+          entity_id: media_player.kitchen_sonos
+          with_group: yes
+      - service: notify.telegram_niklas
+        data:
+          title: "*Dørklokke*"
+          message: "Det ringer på døren..."
+          data:
+            photo:
+              - file: /config/www/tmp/snapshot.jpg
+      - delay:
+          seconds: 2

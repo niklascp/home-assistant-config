@@ -1,0 +1,42 @@
+counter:
+  coffee_machine_cups:
+    name: Kaffemaskine / Antal kopper (total)
+  coffee_machine_americano_cups:
+    name: Kaffemaskine / Antal Americano (total)
+
+automation:
+- alias: coffee_machine_counter
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.coffee_machine_meter_power
+      above: 1500
+  variables:
+    first_triggered: "{{ now() }}"
+    brewing: 0
+  action:
+    - wait_for_trigger:
+      - platform: numeric_state
+        entity_id: sensor.coffee_machine_meter_power
+        below: 100
+      timeout: 300
+      continue_on_timeout: false
+    - variables:
+        brewing: "{{ (as_timestamp(now()) - as_timestamp(first_triggered))|int }}"
+    - service: notify.telegram_niklas
+      data:
+        title: '*Kaffe*'
+        message: "brewing: {{ brewing }}, first triggered = {{ first_triggered }}"
+    - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ 20 < (brewing | int) and (brewing | int) < 70 }}"
+        sequence:
+          - service: counter.increment
+            entity_id: counter.coffee_machine_cups
+    - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ 50 < (brewing | int) and (brewing | int) < 70 }}"
+        sequence:
+          - service: counter.increment
+            entity_id: counter.coffee_machine_americano_cups

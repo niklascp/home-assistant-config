@@ -1,12 +1,10 @@
-homeassistant:
-  customize:
-    group.christmas_lights:
-      friendly_name: 'Julelys'
-
 group:
   christmas_lights:
-    - switch.outdoor_garden
-    - switch.outdoor_christmas_light_driveway
+    name: 'Julelys'
+    entities:
+      #- switch.outdoor_garden
+      - switch.outdoor_christmas_light_driveway
+      - light.living_room_christmas_star
 
 input_boolean:
   christmas_light:
@@ -30,7 +28,7 @@ automation:
     event: sunset
     offset: "00:00:00"
   - platform: time
-    at: "06:00:00"
+    at: input_datetime.christmas_light_start
   condition:
     condition: state
     entity_id: input_boolean.christmas_light
@@ -41,7 +39,7 @@ automation:
 - alias: outdoor_christmas_lights_off
   trigger:
   - platform: time
-    at: "00:00:00"
+    at: input_datetime.christmas_light_end
   - platform: sun
     event: sunrise
     offset: "00:00:00"
