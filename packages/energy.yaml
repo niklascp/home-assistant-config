@@ -1,0 +1,82 @@
+
+# Example configuration.yaml entry
+sensor:
+  - platform: integration
+    name: coffee_machine_meter_energy_2
+    source: sensor.coffee_machine_meter_power
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
+  - platform: integration
+    name: living_room_tv_meter_energy_2
+    source: sensor.living_room_tv_meter_power
+    unit_prefix: k
+    unit_time: h
+    round: 2
+
+mqtt:
+  sensor:
+  - name: grid_import
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.tPI }}"
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    expire_after: 60
+
+  - name: grid_power
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.P / 1000 }}"
+    unit_of_measurement: 'kW'
+    state_class: measurement
+    device_class: energy
+    expire_after: 60
+
+  - name: grid_current_l1
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.I1 }}"
+    unit_of_measurement: 'A'
+    state_class: measurement
+    device_class: current
+    expire_after: 60
+
+  - name: grid_current_l2
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.I2 }}"
+    unit_of_measurement: 'A'
+    state_class: measurement
+    device_class: current
+    expire_after: 60
+
+  - name: grid_current_l3
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.I3 }}"
+    unit_of_measurement: 'A'
+    state_class: measurement
+    device_class: current
+    expire_after: 60
+
+  - name: grid_voltage_l1
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.U1 }}"
+    unit_of_measurement: 'V'
+    state_class: measurement
+    device_class: voltage
+    expire_after: 60
+
+  - name: grid_voltage_l2
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.U2 }}"
+    unit_of_measurement: 'V'
+    state_class: measurement
+    device_class: voltage
+    expire_after: 60
+
+  - name: grid_voltage_l3
+    state_topic: 'kamstrup'
+    value_template: "{{ value_json.data.U3 }}"
+    unit_of_measurement: 'V'
+    state_class: measurement
+    device_class: voltage
+    expire_after: 60
