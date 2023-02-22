@@ -178,3 +178,12 @@ alarm_control_panel.jens_bornos_vej_alarm:
   friendly_name: Alarm
 light.office_spots:
   friendly_name: Kontor / Spots
+binary_sensor.william_window:
+  device_class: window
+switch.ihc_sophia_sleep_mode:
+  friendly_name: Sophia / Godnat
+  icon: mdi:sleep
+binary_sensor.bedroom_window_contact:
+  device_class: window
+sensor.living_room_tv_meter_energy_2:
+  friendly_name: Stue / TV (El-måler, forbrug)

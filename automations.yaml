@@ -8,7 +8,7 @@
     to: not_home
   condition:
   - condition: state
-    entity_id: alarm_control_panel.jens_bornos_vej_alarm
+    entity_id: alarm_control_panel.verisure_alarm
     state: disarmed
   action:
   - data:
@@ -28,9 +28,22 @@
     to: 'on'
   condition: []
   action:
-  - alias: ''
+  - service: automation.turn_off
+    data: {}
+    target:
+      entity_id:
+      - automation.living_room_scene_control
+      - automation.living_room_kitchen_scene_control
+    alias: Disable Scene Control Automations
+  - service: input_select.select_option
+    entity_id: input_select.living_room_mode
+    data:
+      option: Fra
+    alias: Set Living Room Mode
+  - service: homeassistant.turn_off
     data:
       entity_id:
+      - input_boolean.living_room_cooking
       - light.kitchen_downlight
       - light.kitchen_table_lamps
       - light.living_room_spots
@@ -42,22 +55,26 @@
       - light.utility_room_table_light
       - light.corridor_spots
       - light.hallway_downlight
+      - light.office_spots
       - light.william_bed_lamp
       - light.william_spots
       - light.sophia_bed_lamp
       - light.sophia_spots
-    service: homeassistant.turn_off
-  - data:
-      option: Fra
-    entity_id: input_select.living_room_mode
-    service: input_select.select_option
-  - condition: state
-    entity_id: sensor.day_night
-    state: night
-  - data:
-      ihc_id: 2176017
-    entity_id: light.outdoor_driveway_spots
-    service: ihc.pulse
+    alias: Turn Off Entities
+  - service: light.turn_off
+    data:
+      transition: 2
+    target:
+      area_id: 1ff4f52a04ad4c9cae3867b670a4c2a4
+    alias: Turn Off Lights (Rooms)
+  - service: automation.turn_on
+    data: {}
+    target:
+      entity_id:
+      - automation.living_room_scene_control
+      - automation.living_room_kitchen_scene_control
+    alias: Enable Scene Control Automations
+  mode: single
 - id: '1578147796704'
   alias: hallway_closet_on
   description: ''
@@ -94,9 +111,12 @@
   - entity_id: binary_sensor.ihc_sophia_goodnight_start
     platform: state
     to: 'on'
-  - at: '19:00'
+  - at: '21:00:00'
     platform: time
-  condition: []
+  condition:
+  - condition: state
+    entity_id: switch.ihc_sophia_sleep_mode
+    state: 'off'
   action:
   - entity_id: switch.ihc_sophia_sleep_mode
     service: switch.turn_on
@@ -108,11 +128,12 @@
   - data: {}
     entity_id: light.sophia_spots
     service: light.turn_off
+  mode: single
 - id: '1579361605420'
   alias: sophia_sleep_mode_off
   description: ''
   trigger:
-  - at: 07:00
+  - at: 07:00:00
     platform: time
   - entity_id: binary_sensor.ihc_sophia_goodnight_stop
     platform: state
@@ -122,66 +143,52 @@
   - entity_id: switch.ihc_sophia_sleep_mode
     service: switch.turn_off
 - id: '1581175287613'
-  alias: sophia_bed_lamp_toogle_on
+  alias: sophia_bed_lamp_toogle
   description: ''
   trigger:
   - entity_id: binary_sensor.ihc_sophia_bed_lamp_toogle
     platform: state
     to: 'on'
-  condition:
-  - condition: state
-    entity_id: light.sophia_bed_lamp
-    state: 'off'
+  condition: []
   action:
-  - data:
+  - service: light.toggle
+    data:
       brightness_pct: 25
-    entity_id: light.sophia_bed_lamp
-    service: light.turn_on
+    target:
+      device_id: 95db12aab78f4f6c9055834c5f41fbca
 - id: '1581239039910'
   alias: corridor_spots_toggle
   description: ''
   trigger:
-  - entity_id: sensor.xiaomi_button_01_click
+  - entity_id: binary_sensor.corridor_downlight_toogle
     platform: state
-    to: single
+    to: 'on'
   condition: []
   action:
   - entity_id: light.corridor_spots
     service: light.toggle
-- id: '1581337746207'
-  alias: sophia_bed_lamp_toogle_off
-  description: Sluk Sengelampe (Hvis tændt)
-  trigger:
-  - entity_id: binary_sensor.ihc_sophia_bed_lamp_toogle
-    platform: state
-    to: 'on'
-  condition:
-  - condition: state
-    entity_id: light.sophia_bed_lamp
-    state: 'on'
-  action:
-  - entity_id: light.sophia_bed_lamp
-    service: light.turn_off
+    data:
+      entity_id: light.corridor_spots
+  mode: single
 - id: '1581761391770'
   alias: corridor_spots_sleep_mode_toggle
   description: ''
   trigger:
-  - platform: mqtt
-    topic: zigbee2mqtt/0x00158d000424cd00
-  condition:
-  - condition: template
-    value_template: '{{ "hold" == trigger.payload_json.action }}'
+  - platform: state
+    entity_id: binary_sensor.corridor_goodnight_toogle
+    to: 'on'
+  condition: []
   action:
   - entity_id: input_boolean.corridor_sleep_mode
     service: input_boolean.toggle
+    data:
+      entity_id: input_boolean.corridor_sleep_mode
+  mode: single
 - id: '1584307470667'
   alias: Udendørs / Tænd spots ved døråbning
   description: Tænder udelys (spots i udhæng) når en af dørene åbnes.
   trigger:
-  - entity_id: binary_sensor.utility_room_door_contact
-    platform: state
-    to: 'on'
-  - entity_id: binary_sensor.front_door_contact
+  - entity_id: binary_sensor.driveway_doors
     platform: state
     to: 'on'
   condition:
@@ -189,12 +196,27 @@
     entity_id: sensor.day_light_mode
     state: night
   - condition: state
-    entity_id: input_boolean.welcome_home_at_night_active
+    entity_id: light.outdoor_driveway_spots
     state: 'off'
   action:
-  - data:
-      ihc_id: 2176017
-    service: ihc.pulse
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.outdoor_driveway_spots
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.driveway_doors
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 3
+        seconds: 0
+    timeout: 00:15:00
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.outdoor_driveway_spots
+  mode: single
 - id: '1584869219598'
   alias: William / Climate off when window open
   description: ''
@@ -255,17 +277,42 @@
   alias: Bryggers / Vandlækage
   description: ''
   trigger:
-  - device_id: 258eccf55f5c4c02bf47228e1ddb3e48
-    domain: binary_sensor
-    entity_id: binary_sensor.utility_room_water_leak
+  - type: moist
     platform: device
-    type: moist
+    device_id: 258eccf55f5c4c02bf47228e1ddb3e48
+    entity_id: binary_sensor.utility_room_water_leak_water_leak
+    domain: binary_sensor
   condition: []
   action:
-  - data:
-      message: Vandlækage i bryggers!
-      title: Alarm
-    service: notify.telegram_niklas
+  - repeat:
+      until:
+      - type: is_not_moist
+        condition: device
+        device_id: 258eccf55f5c4c02bf47228e1ddb3e48
+        entity_id: binary_sensor.utility_room_water_leak_water_leak
+        domain: binary_sensor
+        for:
+          hours: 0
+          minutes: 5
+          seconds: 0
+      sequence:
+      - service: notify.mobile_app_niklas_mobile
+        data:
+          message: Der er detekteret vandlækage i bryggers!
+          title: 'Vandlækage '
+      - service: notify.telegram_niklas
+        data:
+          message: Der er detekteret vandlækage i bryggers!
+          title: Vandlækage
+      - delay:
+          hours: 0
+          minutes: 1
+          seconds: 0
+          milliseconds: 0
+      - device_id: 716570a6eb884b418cd7ce060c44e982
+        domain: light
+        entity_id: light.utility_room_table_light
+        type: flash
 - id: '1586774175973'
   alias: Bryggers / Lys under skabe / Lysstyring (Tænd)
   description: ''
@@ -313,4 +360,130 @@
   - data:
       message: 'ADVARSEL: Fryseren står åbent!'
     service: notify.mobile_app_niklas_samsung_s8
+  mode: single
+- id: '1601019068519'
+  alias: Bryggers / Lys under skabe / Lysstyring (Kip)
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 7ba866fec10d46a0b9224b0efb01e06c
+    type: click
+    subtype: single
+    discovery_id: 0x00158d000424cd00 click_single
+  condition: []
+  action:
+  - type: toggle
+    device_id: 716570a6eb884b418cd7ce060c44e982
+    entity_id: light.utility_room_table_light
+    domain: light
+  mode: single
+- id: '1615152521529'
+  alias: Køkken / Madlavning - Aktiver ved aktivitet
+  description: Aktiverer madlavnings scene ved aktivitet i køkkrenet (køkkenbord)
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 5f3cbabebae0a6f61b35659a8a11c3d5
+    entity_id: binary_sensor.kitchen_table_occupancy_occupancy
+    domain: binary_sensor
+  condition:
+  - condition: state
+    entity_id: input_boolean.living_room_cooking
+    state: 'off'
+  - condition: or
+    conditions:
+    - condition: time
+      after: 06:00
+      before: 09:00
+    - condition: time
+      after: '16:30'
+      before: '19:00'
+  action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.living_room_cooking
+  mode: single
+- id: '1615498005717'
+  alias: LK Fuga Test
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 1223f1ef6ef4aaf6d0ee90904e83bc78
+    type: action
+    subtype: on_s1
+    discovery_id: 0x60a423fffe50109c action_on_s1
+  condition: []
+  action:
+  - type: toggle
+    device_id: 1223f1ef6ef4aaf6d0ee90904e83bc78
+    entity_id: switch.0x60a423fffe50109c_l1
+    domain: switch
+  mode: single
+- id: '1615725877774'
+  alias: William / TagReader
+  description: ''
+  trigger:
+    platform: tag
+    tag_id:
+    - B0-00-0C-32
+    - 55-9B-15-2A
+    - 04-0C-92-42-21-6F-81
+    - C2-0F-B9-3D
+  condition:
+  - '{{ trigger.event.data.tag_id in tags }}'
+  action:
+  - variables:
+      media_content_id: '{{ tags[trigger.event.data.tag_id].media_content_id }}'
+      media_content_type: '{{ tags[trigger.event.data.tag_id].media_content_type }}'
+  - service: media_player.play_media
+    data:
+      media_content_id: '{{ media_content_id }}'
+      media_content_type: '{{ media_content_type }}'
+    target:
+      entity_id: media_player.william_nest_mini
+  mode: single
+  variables:
+    tags:
+      B0-00-0C-32:
+        media_content_id: 'plex://{"playlist_name": "Børnemusik - Bamse & Kylling",
+          "shuffle": "1"}'
+        media_content_type: playlist
+      55-9B-15-2A:
+        media_content_id: 'plex://{"playlist_name": "Børnemusik - Kaj & Andrea", "shuffle":
+          "1"}'
+        media_content_type: playlist
+      04-0C-92-42-21-6F-81:
+        media_content_id: 'plex://{"playlist_name": "Børnemusik - Kaj & Andrea", "shuffle":
+          "1"}'
+        media_content_type: playlist
+      C2-0F-B9-3D:
+        media_content_id: 'plex://{"playlist_name": "Børnemusik - Rock", "shuffle":
+          "1"}'
+        media_content_type: playlist
+- id: '1627762008497'
+  alias: test
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - service: script.on_off_dim
+    data:
+      button: input_boolean.bedroom_spots_button
+  mode: single
+- id: '1628882812283'
+  alias: bedroom_wake_up
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:45:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  action:
+  - service: script.bedroom_simulated_runrise
+    data:
+      delay: 300
   mode: single

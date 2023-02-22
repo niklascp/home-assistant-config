@@ -1,89 +1,105 @@
-'living_room_hygge':
-  alias: living_room_hygge
+bedroom_simulated_runrise:
   sequence:
-  - data:
-      brightness_pct: 15
-    entity_id: light.living_room_spots
-    service: light.turn_on
-  - data:
-      brightness_pct: 15
-    entity_id: light.kitchen_downlight
-    service: light.turn_on
-  - data:
+  - service: light.turn_off
+    target:
+      entity_id: light.bedroom_spots
+    data: {}
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_3
+    data:
+      kelvin: 2000
+      brightness_pct: 1
+  - delay: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_2
+    data:
+      kelvin: 2000
+      brightness_pct: 1
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_3
+    data:
+      kelvin: 2200
+      brightness_pct: 5
+      transition: '{{ delay | int }}'
+  - delay: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_1
+    data:
+      kelvin: 2200
+      brightness_pct: 1
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_2
+    data:
+      kelvin: 2400
+      brightness_pct: 5
+      transition: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_3
+    data:
+      kelvin: 2600
+      brightness_pct: 10
+      transition: '{{ delay | int }}'
+  - delay: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_1
+    data:
+      kelvin: 2400
+      brightness_pct: 5
+      transition: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_2
+    data:
+      kelvin: 2600
+      brightness_pct: 10
+      transition: '{{ delay | int }}'
+  - service: light.turn_on
+    target:
+      entity_id: light.bedroom_spot_3
+    data:
+      kelvin: 2800
       brightness_pct: 30
-      transition: 5
-    entity_id: light.living_room_dinning_table_pendel
-    service: light.turn_on
-  - data:
-      brightness_pct: 50
-      transition: 5
-    entity_id: light.living_room_couch_table_pendel
-    service: light.turn_on
-  - data:
-      brightness_pct: 50
-      transition: 5
-    entity_id: light.living_room_table_lamp
-    service: light.turn_on
-  - data:
-      brightness_pct: 50
-      transition: 5
-    entity_id: light.living_room_lamp_at_tv
-    service: light.turn_on
-  - entity_id: light.kitchen_table_lamps
-    service: light.turn_off
-
-'living_room_spise':
-  alias: living_room_spise
-  sequence:
-  - data:
-      brightness_pct: 50
-    entity_id: light.living_room_spots
-    service: light.turn_on
-  - data:
-      brightness_pct: 50
-    entity_id: light.kitchen_downlight
-    service: light.turn_on
-  - data:
-      brightness_pct: 100
-      transition: 5
-    entity_id: light.living_room_dinning_table_pendel
-    service: light.turn_on
-  - data:
-      brightness_pct: 70
-      transition: 5
-    entity_id: light.living_room_couch_table_pendel
-    service: light.turn_on
-  - data:
-      brightness_pct: 70
-      transition: 5
-    entity_id: light.living_room_table_lamp
-    service: light.turn_on
-  - data:
-      brightness_pct: 70
-      transition: 5
-    entity_id: light.living_room_lamp_at_tv
-    service: light.turn_on
-
-'living_room_cleaning':
-  sequence:
+      transition: '{{ delay | int }}'
+  - delay: '{{ delay | int }}'
   - service: light.turn_on
-    entity_id:
-      - light.living_room_spots
-      - light.kitchen_downlight
-      - light.living_room_dinning_table_pendel
-      - light.living_room_couch_table_pendel
-      - light.living_room_table_lamp
-      - light.living_room_lamp_at_tv
+    target:
+      entity_id:
+      - light.bedroom_spot_1
+      - light.bedroom_spot_2
+      - light.bedroom_spot_3
     data:
-      brightness_pct: 100
-      transition: 0
-
-'living_room_cooking':
-  sequence:
+      kelvin: 3000
+      brightness_pct: 30
+      transition: '{{ delay | int }}'
+  - delay: '{{ delay | int }}'
   - service: light.turn_on
-    entity_id:
-      - light.kitchen_downlight
-      - light.kitchen_table_lamps
+    target:
+      entity_id:
+      - light.bedroom_spot_1
+      - light.bedroom_spot_2
+      - light.bedroom_spot_3
     data:
-      brightness_pct: 100
-      transition: 0
+      kelvin: 3000
+      brightness_pct: 60
+      transition: '{{ delay | int }}'
+  - delay: '{{ delay | int }}'
+  mode: restart
+  alias: Sovevær. / Simuleret solopgang
+  icon: mdi:weather-sunset-up
+  fields:
+    delay:
+      name: Forsinkelse
+      default: 5
+      selector:
+        number:
+          min: 5
+          max: 300
+          step: 5
+          unit_of_measurement: s
