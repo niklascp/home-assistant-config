@@ -1,3 +1,9 @@
+homeassistant:
+  customize:
+    automation.living_room_toggle_cooking:
+      icon: mdi:pot-steam
+      friendly_name: Madlavning
+
 input_select:
   living_room_mode:
     name: Stue / Program
@@ -7,116 +13,379 @@ input_select:
       - Fra
     icon: mdi:robot
 
+input_boolean:
+  living_room_cooking:
+    name: Køkken / Madlavning
+    icon: mdi:pot-steam
+
+input_number:
+  living_room_target_brightness:
+    name: Stue / Mållysstyrke
+    min: 0
+    max: 100
+    step: 1
+    icon: mdi:brightness-percent
+    unit_of_measurement: '%'
+  living_room_auto_brightness_min_lux:
+    name: Stue / Min. lux. niveau
+    min: 0
+    max: 1000
+    step: 1
+    icon: mdi:brightness-5
+    unit_of_measurement: 'lx'
+    mode: box
+  living_room_auto_brightness_max_lux:
+    name: Stue / Max. lux. niveau        
+    min: 0
+    max: 1000
+    step: 1
+    icon: mdi:brightness-7
+    unit_of_measurement: 'lx'
+    mode: box
+    
 sensor:
 - platform: template
   sensors:
     living_room_target_brightness:
-      friendly_name: "Stue / Mållysstyrke"
+      friendly_name: "Stue / Mållysstyrke (Beregnet)"
       unit_of_measurement: "%"
       value_template: >
         {% set lux = states('sensor.sun_illuminance_south_lux') | float %}
-        {% set min_lux = 50 %}
-        {% set half_lux = 1000 %}
-        {% if lux < min_lux %}
-          100
-        {% else %}
-          {{ (100 * 1/(1+((lux-min_lux)/(half_lux-min_lux))**2)) | round }}
-        {% endif %}
+        {% set min_lux = states('input_number.living_room_auto_brightness_min_lux') | float %}
+        {% set max_lux = states('input_number.living_room_auto_brightness_max_lux') | float %}
+        {% set x = (lux-min_lux) / (max_lux-min_lux) * 2 * pi - pi %}
+        {{ (-100 * (e**(2*x) - 1) / (e**(2*x) + 1) / 2 + 50) | round }}
       icon_template: mdi:brightness-percent
-    living_room_target_brightness_10min_max:
-      friendly_name: "Stue / Mållysstyrke (10min, max)"
-      unit_of_measurement: "%"
-      value_template: "{{state_attr('sensor.living_room_target_brightness_10min', 'max_value')}}"
-- platform: statistics
-  name: living_room_target_brightness_10min
-  entity_id: sensor.living_room_target_brightness
-  sampling_size: 1000
-  precision: 0
-  max_age:
-    minutes: 10
+
+# This is just used to show some state colors on the frontend.
+binary_sensor:
+  - platform: template
+    sensors:
+      living_room_scene_spise_active:
+        friendly_name: "Spise"
+        value_template: >
+          {{ is_state('input_select.living_room_mode', 'Spise') }}
+        icon_template: mdi:silverware-variant
+      living_room_scene_hygge_active:
+        friendly_name: "Hygge"
+        value_template: >
+          {{ is_state('input_select.living_room_mode', 'Hygge') }}
+        icon_template: mdi:sofa
+
+mqtt:        
+  cover:
+  - name: "living_room_blinds_couch"
+    command_topic: "cmnd/tasmota_42E272/backlog"
+    payload_close: "rfraw AA B0 4C 04 08 13A6 0280 0118 13C4 38192A192A1A1A19292A192A1A1A192A1929292A192A1A19292A19292A1A1A192A1A1A1A1A1A1A1A192A1A1A1A1A1A1A1A1A192A1A1A1A1929292A19292929292A19 55"
+    payload_open:  "rfraw AA B0 4C 04 08 13B0 0280 0122 13BA 38192A192A1A1A19292A192A1A1A192A1929292A192A1A19292A19292A1A1A192A1A1A1A1A1A1A1A192A1A1A1A1A1A1A1A1A1A1A1A192A1929292A1A1A1A19292A19 55"
+    payload_stop:  "rfraw AA B0 4C 04 08 13A6 0280 0122 13C4 38192A192A1A1A19292A192A1A1A192A1929292A192A1A19292A19292A1A1A192A1A1A1A1A1A1A1A192A1A1A1A1A1A1A1A1A1A192A1A1A1929292A1A192929292A19 55"
+    position_topic: "not_implemented"
+    position_template: "50"
+
+# This is the main scripts that controls the light
+script:
+  'living_room_update_kitchen_scene':
+    alias: Køkken / Lysstyring
+    mode: restart
+    variables:
+      target_brightness_low: >
+        {% if (states('input_number.living_room_target_brightness') | float) > 70 -%}
+          {{ (0.30 * (states('input_number.living_room_target_brightness') | float)) | round }}
+        {%- else -%}
+          0
+        {%- endif %}
+      target_brightness_medium: >
+        {% if (states('input_number.living_room_target_brightness') | float) > 50 -%}
+          {{ (0.50 * (states('input_number.living_room_target_brightness') | float)) | round }}
+        {%- else -%}
+          0
+        {%- endif %}
+    sequence:
+    - choose:
+      # Cooking on
+      - conditions:
+        - condition: state
+          entity_id: input_boolean.living_room_cooking
+          state: 'on'
+        sequence:
+          - service: light.turn_on
+            entity_id:
+              - light.kitchen_downlight
+              - light.kitchen_table_lamps
+            data:
+              brightness_pct: 100
+      # Scene: Spise
+      - conditions:
+        - condition: state
+          entity_id: input_select.living_room_mode
+          state: 'Spise'
+        sequence:
+          - service: light.turn_on
+            entity_id:
+              - light.kitchen_downlight
+            data:
+              brightness_pct: "{{ target_brightness_low }}"
+          - service: light.turn_off
+            entity_id:
+              - light.kitchen_table_lamps
+      # Scene: Hygge
+      - conditions:
+        - condition: state
+          entity_id: input_select.living_room_mode
+          state: 'Hygge'
+        sequence:
+          - service: light.turn_on
+            entity_id:
+              - light.kitchen_downlight
+            data:
+              brightness_pct: 15
+          - service: light.turn_off
+            entity_id:
+              - light.kitchen_table_lamps
+      # Cooking off and Scene control is off
+      - conditions:
+        - condition: state
+          entity_id: input_boolean.living_room_cooking
+          state: 'off'
+        - condition: state
+          entity_id: input_select.living_room_mode
+          state: 'Fra'
+        sequence:
+          - service: light.turn_off
+            entity_id:
+              - light.kitchen_downlight
+              - light.kitchen_table_lamps
+  'living_room_update_scene':
+    alias: Stue / Lysstyring
+    mode: restart
+    variables:
+      target_brightness_low: >
+        {% if (states('input_number.living_room_target_brightness') | float) > 70 -%}
+          {{ (0.30 * (states('input_number.living_room_target_brightness') | float)) | round }}
+        {%- else -%}
+          0
+        {%- endif %}
+      target_brightness_medium: >
+        {% if (states('input_number.living_room_target_brightness') | float) > 50 -%}
+          {{ (0.50 * (states('input_number.living_room_target_brightness') | float)) | round }}
+        {%- else -%}
+          0
+        {%- endif %}
+    sequence:
+    - choose:
+      # Scene: Spise
+      - conditions:
+        - condition: state
+          entity_id: input_select.living_room_mode
+          state: 'Spise'
+        sequence:
+          # Low
+          - service: light.turn_on
+            entity_id:
+              - light.living_room_lamp_at_tv
+              - light.living_room_table_lamp
+            data:
+              brightness_pct: "{{ target_brightness_low }}"
+          # Medium
+          - service: light.turn_on
+            entity_id:
+              - light.living_room_couch_table_pendel
+              - light.living_room_spots
+            data:
+              brightness_pct: "{{ target_brightness_medium }}"
+              transition: 5
+          # High
+          - service: light.turn_on
+            entity_id:              
+              - light.living_room_dinning_table_pendel
+            data:
+              brightness_pct: 100
+              transition: 5
+      # Scene: Hygge
+      - conditions:
+        - condition: state
+          entity_id: input_select.living_room_mode
+          state: 'Hygge'
+        sequence:
+          # Low
+          - service: light.turn_on
+            entity_id:
+              - light.living_room_spots
+              - light.living_room_lamp_at_tv
+            data:
+              brightness_pct: 15
+          # Medium
+          - service: light.turn_on
+            entity_id:
+              - light.living_room_dinning_table_pendel              
+              - light.living_room_table_lamp
+            data:
+              brightness_pct: 30
+              transition: 5
+          # High
+          - service: light.turn_on
+            entity_id:
+              - light.living_room_couch_table_pendel
+            data:
+              brightness_pct: 50
+              transition: 5
+  'living_room_cleaning':
+    sequence:
+    - service: light.turn_on
+      entity_id:
+        - light.living_room_spots
+        - light.kitchen_downlight
+        - light.kitchen_table_lamps
+        - light.living_room_dinning_table_pendel
+        - light.living_room_couch_table_pendel
+        - light.living_room_table_lamp
+        - light.living_room_lamp_at_tv
+      data:
+        brightness_pct: 100
+        transition: 0
+
 # Automations
 automation:
-  # This automation listen for changes in living_room_mode and day_light_mode and publishes a matching scene to mqtt.
+  # This automation listen for changes in living_room_mode, and triggers scripts to update
   - alias: living_room_scene_control
+    id: d75b0774-85ae-40dc-abd3-ddfc194e6497
     trigger:
       - platform: state
         entity_id: input_select.living_room_mode
+      - platform: state
+        entity_id: input_number.living_room_target_brightness
     action:
-      - service: mqtt.publish
-        data_template:
-          topic: living_room/scene
-          retain: true
-          payload: >
-            {% set script = 'script.living_room_' + states('input_select.living_room_mode').lower() %}
-            {% if is_state(script, 'off') -%}
-              {{ script }}
-            {%- else -%}
-              off
-            {%- endif %}
+      - service: script.turn_on
+        data:
+          entity_id: 
+            - script.living_room_update_scene
+            - script.living_room_update_kitchen_scene
 
-  # This automation actually sets the scene.
-  - alias: living_room_scene_set
+  # This is the main
+  - alias: living_room_kitchen_scene_control
+    id: 3d4c4da6-90fa-476b-9d26-215ec75dffd3
     trigger:
-      - platform: mqtt
-        topic: living_room/scene
-    condition:
-      - condition: template
-        value_template: "{{ states(trigger.payload) != 'unknown' }}"
+      - platform: state
+        entity_id: input_boolean.living_room_cooking
     action:
-      - service: homeassistant.turn_on
-        data_template:
-          entity_id: "{{ trigger.payload }}"
+      - service: script.turn_on
+        data:
+          entity_id: script.living_room_update_kitchen_scene
+
+  # Automativally turn off cooking mode after 1H, or if swithing to Hygge
+  - alias: living_room_cooking_auto_off
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kitchen_table_occupancy_occupancy
+        to: 'off'
+        for: '01:00:00'
+      - platform: state
+        entity_id: input_select.living_room_mode
+        to:  'Hygge'
+    action:
+      - service: input_boolean.turn_off
+        data:
+          entity_id: input_boolean.living_room_cooking
+
+  # Automatically update target brightness based on calculated value.
+  - alias: living_room_auto_brightness
+    description: "Automatically update target brightness based on calculated value."
+    id: 70c895ec-bf02-4ea6-8305-49ff28abe72ds
+    trigger:
+      - platform: template
+        value_template: "{{ states('sensor.living_room_target_brightness') | int > states('input_number.living_room_target_brightness')|int }}"
+        for:
+          minutes: 1
+      - platform: template
+        value_template: "{{ states('sensor.living_room_target_brightness') | int < states('input_number.living_room_target_brightness')|int }}"
+        for:
+          minutes: 5
+    action:
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.living_room_target_brightness
+          value: "{{ states('sensor.living_room_target_brightness') | int }}"
 
   # The following automations are just hooks for IHC push buttons.
-  - alias: living_room_scene_hygge
+  - alias: living_room_scene_hygge_short_press
     trigger:
       - platform: state
         entity_id: binary_sensor.living_room_scene_hygge
+        to: 'on'
     action:
       - service: input_select.select_option
         data:
           entity_id: input_select.living_room_mode
           option: 'Hygge'
+      - service: script.turn_on
+        data:
+          entity_id:
+            - script.living_room_update_scene
+            - script.living_room_update_kitchen_scene
+
+  - alias: living_room_scene_hygge_long_press
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.living_room_scene_hygge_long_press
+        to: 'on'
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.living_room_mode
+          option: 'Hygge'
+      - service: input_boolean.turn_off
+        entity_id:
+          - input_boolean.living_room_cooking
+      - service: script.turn_on
+        data:
+          entity_id:
+            - script.living_room_update_scene
+            - script.living_room_update_kitchen_scene
 
   - alias: living_room_scene_dinning_short_press
     trigger:
-    - platform: state
-      entity_id: binary_sensor.living_room_scene_dinning_short_press
-      to: 'on'
+      - platform: state
+        entity_id: binary_sensor.living_room_scene_dinning_short_press
+        to: 'on'
     action:
       - service: input_select.select_option
         data:
           entity_id: input_select.living_room_mode
           option: 'Spise'
-
+      - service: script.turn_on
+        data:
+          entity_id:
+            - script.living_room_update_scene
+            - script.living_room_update_kitchen_scene
+  
   - alias: living_room_scene_dinning_long_press
     trigger:
-    - platform: state
-      entity_id: binary_sensor.living_room_scene_dinning_long_press
-      to: 'on'
+      - platform: state
+        entity_id: binary_sensor.living_room_scene_dinning_long_press
+        to: 'on'
     action:
       - service: input_select.select_option
         data:
           entity_id: input_select.living_room_mode
           option: 'Spise'
-      - service: automation.trigger
-        data:
-          entity_id: automation.living_room_scene_control
-      - service: light.turn_off
+      - service: input_boolean.turn_off
         entity_id:
-          - light.kitchen_table_lamps
+          - input_boolean.living_room_cooking
+      - service: script.turn_on
+        data:
+          entity_id:
+            - script.living_room_update_scene
+            - script.living_room_update_kitchen_scene
 
-  - alias: living_room_scene_cooking
+  - alias: living_room_toggle_cooking
     trigger:
     - platform: state
       entity_id: binary_sensor.living_room_scene_cooking
+      to: 'on'
     action:
-      - service: input_select.select_option
+      - service: input_boolean.toggle
         data:
-          entity_id: input_select.living_room_mode
-          option: 'Fra'
-      - service: script.turn_on
-        entity_id: script.living_room_cooking
+          entity_id: input_boolean.living_room_cooking
 
   - alias: living_room_scene_cleaning
     trigger:
@@ -140,6 +409,9 @@ automation:
         data:
           entity_id: input_select.living_room_mode
           option: 'Fra'
+      - service: input_boolean.turn_off
+        data:
+          entity_id: input_boolean.living_room_cooking
       - service: light.turn_off
         entity_id:
           - light.living_room_spots
@@ -150,19 +422,16 @@ automation:
           - light.living_room_glass_cabinet
           - light.kitchen_downlight
           - light.kitchen_table_lamps
-
-  - alias: sleep_mode_activate_on_all_off_east
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.all_off_east
-        to: 'on'
-    condition:
-      - condition: time
-        after: '21:30:00'
-        before: '04:00:00'
-    action:
-      - service: input_boolean.turn_on
-        data:
-          entity_id:
-            - input_boolean.sleep_mode
-            - input_boolean.corridor_sleep_mode
+          - light.office_spots
+          - light.living_room_christmas_star
+      - choose:
+          - conditions:
+              - condition: time
+                after: '21:30:00'
+                before: '04:00:00'
+            sequence:
+              - service: input_boolean.turn_on
+                data:
+                  entity_id:
+                    - input_boolean.sleep_mode
+                    - input_boolean.corridor_sleep_mode
