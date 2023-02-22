@@ -1,0 +1,43 @@
+mqtt:
+  sensor:
+    - name: "boiler_hot_water_temperature"
+      state_topic: "pps/drinking_water_temperature"
+      unique_id: "5a73dad0-134e-4a4d-b980-116bc65cdcfd"
+      unit_of_measurement: "°C"
+      state_class: measurement
+      device_class: temperature
+
+    - name: "boiler_room_temperature"
+      state_topic: "pps/room_temperature"
+      unique_id: "38df33a4-11e9-459f-b53d-da4d2a9b1ce0"
+      unit_of_measurement: "°C"
+      state_class: measurement
+      device_class: temperature
+
+    - name: "boiler_flow_temperature"
+      state_topic: "pps/flow_temperature"
+      unique_id: "329649aa-78da-4217-83fb-89b4644fcb30"
+      unit_of_measurement: "°C"
+      state_class: measurement
+      device_class: temperature
+
+    - name: "boiler_outside_temperature"
+      state_topic: "pps/outside_temperature"
+      unique_id: "0de2d885-d5cb-4109-8168-de96ddac9a57"
+      unit_of_measurement: "°C"
+      state_class: measurement
+      device_class: temperature
+
+    - name: "boiler_burner_status"
+      state_topic: "pps/burner_status"
+      unique_id: "80350bf1-4808-4a73-8c3c-baacabd3c330"
+
+    - name: "boiler_operating_mode"
+      state_topic: "pps/operating_mode"
+      unique_id: "2d130d2f-66af-43d4-b2d5-490fd0aa5c33"
+
+    - name: "boiler_burner_flow_temperature"
+      state_topic: "pps/burner_flow_temperature"
+      unit_of_measurement: "°C"
+      state_class: measurement
+      device_class: temperature
