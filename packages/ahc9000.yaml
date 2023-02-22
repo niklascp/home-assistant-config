@@ -19,35 +19,49 @@ homeassistant:
     automation.climate_night_mode_end:
       friendly_name: Natsænkning Slut
 
-sensor:
-  - platform: mqtt
-    name: living_room_temp
-    state_topic: 'heat/floor84F3EB9FC608/0/current'
-    unit_of_measurement: '°C'
-    availability_topic: 'heat/floor84F3EB9FC608/online'
-    payload_available: 'True'
-    payload_not_available: 'False'
-  - platform: mqtt
-    name: william_temp
-    state_topic: 'heat/floor84F3EB9FC608/3/current'
-    unit_of_measurement: '°C'
-    availability_topic: 'heat/floor84F3EB9FC608/online'
-    payload_available: 'True'
-    payload_not_available: 'False'
-  - platform: mqtt
-    name: sophia_temp
-    state_topic: 'heat/floor84F3EB9FC608/4/current'
-    unit_of_measurement: '°C'
-    availability_topic: 'heat/floor84F3EB9FC608/online'
-    payload_available: 'True'
-    payload_not_available: 'False'
-  - platform: mqtt
-    name: hall_temp
-    state_topic: 'heat/floor84F3EB9FC608/6/current'
-    unit_of_measurement: '°C'
-    availability_topic: 'heat/floor84F3EB9FC608/online'
-    payload_available: 'True'
-    payload_not_available: 'False'
+mqtt:
+  sensor:
+    - name: living_room_temp
+      state_topic: 'heat/floor84F3EB9FC608/0/current'
+      unit_of_measurement: '°C'
+      device_class: temperature
+      state_class: measurement
+      availability_topic: 'heat/floor84F3EB9FC608/online'
+      payload_available: 'True'
+      payload_not_available: 'False'
+    - name: william_temp
+      state_topic: 'heat/floor84F3EB9FC608/3/current'
+      unit_of_measurement: '°C'
+      device_class: temperature
+      state_class: measurement
+      availability_topic: 'heat/floor84F3EB9FC608/online'
+      payload_available: 'True'
+      payload_not_available: 'False'
+    - name: sophia_temp
+      state_topic: 'heat/floor84F3EB9FC608/4/current'
+      unit_of_measurement: '°C'
+      device_class: temperature
+      state_class: measurement
+      availability_topic: 'heat/floor84F3EB9FC608/online'
+      payload_available: 'True'
+      payload_not_available: 'False'
+    - name: bedroom_temp
+      unique_id: 'd9121aab-e5e2-4f36-9afb-9ec8f0a2c11a'
+      state_topic: 'heat/floor84F3EB9FC608/5/current'
+      unit_of_measurement: '°C'
+      device_class: temperature
+      state_class: measurement
+      availability_topic: 'heat/floor84F3EB9FC608/online'
+      payload_available: 'True'
+      payload_not_available: 'False'
+    - name: hall_temp
+      state_topic: 'heat/floor84F3EB9FC608/6/current'
+      unit_of_measurement: '°C'
+      device_class: temperature
+      state_class: measurement
+      availability_topic: 'heat/floor84F3EB9FC608/online'
+      payload_available: 'True'
+      payload_not_available: 'False'
 
 input_number:
   climate_target_temperature_living_room_day:

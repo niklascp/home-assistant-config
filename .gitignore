@@ -12,9 +12,8 @@ tts/
 www/
 esphome/
 deps/
-home-assistant.log
+home-assistant.log*
 secrets.yaml
 known_devices.yaml
 custom_components/
-!custom_components/dmi
-!custom_components/connectedcars
+**/log/*
