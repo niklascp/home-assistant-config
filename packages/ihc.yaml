@@ -1,3 +1,9 @@
+homeassistant:
+  customize:
+    switch.ihc_william_sleep_mode:
+      friendly_name: William / Godnat
+      icon: mdi:sleep
+
 ihc:
   - url: !secret ihc_url
     username: !secret ihc_username
@@ -62,13 +68,24 @@ ihc:
         name: ihc_hallway_dark_mode
       - id: 3153425
         name: ihc_hallway_manual_mode
-      # Børneværelse 1 - Sophia
+      # Børneværelse 1 - William
+      - id: 2216721
+        name: ihc_william_sleep_mode
+      # Børneværelse 2 - Sophia
       - id: 2993937
         name: ihc_sophia_sleep_mode
     binary_sensor:
-      - id: 2715154
+      # Corridor
+      - id: 1948506
         name: corridor_occupancy
         type: motion
+      - id: 1948762
+        name: corridor_ambient_light
+        type: light
+      - id: 4284434
+        name: corridor_downlight_toogle
+      - id: 4197724
+        name: corridor_goodnight_toogle
       - id: 3126106
         name: hallway_occupancy
         type: motion
@@ -86,8 +103,10 @@ ihc:
         name: living_room_scene_dinning_short_press
       - id: 3751186
         name: living_room_scene_dinning_long_press
-      - id: 3615762
+      - id: 4318226
         name: living_room_scene_hygge
+      - id: 4346642
+        name: living_room_scene_hygge_long_press  
       - id: 2832914
         name: living_room_scene_cooking
       - id: 2144274

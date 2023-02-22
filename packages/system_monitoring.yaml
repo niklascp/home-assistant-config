@@ -4,11 +4,6 @@ homeassistant:
       friendly_name: 'Database Størrelse'
       icon: 'mdi:database'
 
-input_boolean:
-  daily_snapshot:
-    name: Create and upload daily snapshots
-    icon: mdi:cloud-upload
-
 binary_sensor:
   - platform: ping
     name: ping_ihc_controller
@@ -25,16 +20,6 @@ sensor:
         value_template: !secret http_base_url
       ha_token:
         value_template: !secret ha_token
-  # Installed hass.io version
-  - platform: version
-    name: Installed Version
-    source: local
-  # Latest Available HA Version
-  - platform: version
-    name: Latest Available Version
-    beta: false
-    image: qemux86-64
-    source: hassio
   # Last boot time, Disk, memory & CPU usage
   - platform: systemmonitor
     resources:
@@ -43,50 +28,16 @@ sensor:
         arg: /
       - type: memory_use_percent
       - type: processor_use
-  - platform: uptime
-  # CPU Temperature 
-  - platform: mqtt
-    state_topic: system/nuc/temp
-    name: CPU Temp
-    unit_of_measurement: "°C"
-    value_template: '{{ value | multiply(0.001) | round(0) }}'
-  # Database size
-  - platform: sql
-    db_url: !secret mariadb_url
-    scan_interval: 3600
-    queries:
-      - name: db_size
-        query: "select round(sum(data_length + index_length) / 1024 / 1024, 1) as db_size from information_schema.tables WHERE table_schema='homeassistant'"
-        column: db_size
-        unit_of_measurement: MB
+
+mqtt:
+  sensor:
+    # CPU Temperature - pushed from proxmox usig a cron job
+    - name: CPU Temp
+      state_topic: system/nuc/temp
+      unit_of_measurement: "°C"
+      value_template: '{{ value | multiply(0.001) | round(0) }}'
 
 automation:
-  - alias: Daily snapshot
-    trigger:
-      platform: time
-      at: '03:15:00'
-    condition:
-      condition: state
-      entity_id: input_boolean.daily_snapshot
-      state: 'on'
-    action:
-      service: hassio.snapshot_partial
-      data_template:
-        name: snapshot_{{ now().strftime('%Y-%m-%d') }}
-        addons:
-          - 15ef4d2f_esphome
-          - 7ad98f9c_zigbee2mqtt
-          - a0d7b954_appdaemon
-          - a0d7b954_motioneye
-          - a0d7b954_mqtt
-          - core_duckdns
-          #- core_mosquitto
-          - core_samba
-        folders:
-          - homeassistant
-          #- share # Disabled due to Motion Eye
-          - ssl
-          - addons_local
   - alias: 'system_boot_notification'
     trigger:
     - event: start
