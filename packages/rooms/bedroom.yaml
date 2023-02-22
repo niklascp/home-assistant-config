@@ -1,0 +1,149 @@
+mqtt:
+  light:
+    - schema: json
+      name: bedroom_spots
+      command_topic: "zigbee2mqtt/bedroom_spots/set"
+      state_topic: "zigbee2mqtt/bedroom_spots"
+      brightness: true
+      color_mode: true
+      min_mireds: 153
+      max_mireds: 454
+      effect_list: ["blink", "breathe", "okay", "channel_change", "finish_effect", "stop_effect"]
+      supported_color_modes: ["color_temp"]
+
+input_boolean:
+  bedroom_spots_button:
+    name: Press/hold input for bedroom spots control
+  bedroom_spots_up_down:
+    name: Up/down indicator for brighten or dim the light
+
+script:
+  on_off_dim:
+    alias: Single button on/off/dim light control
+    fields:
+      light:
+        name: Light
+        selector:
+          entity:
+            domain: light
+      button:
+        name: Button
+        selector:
+          entity:
+    sequence:
+      - alias: Wait for release or timeout (e.g. hold)
+        wait_template: "{{ is_state(button, 'off') }}"
+        timeout: '00:00:01'
+        continue_on_timeout: true
+      - alias: Detect hold or short press
+        choose:
+          - alias: Hold detected - brighten or dim the light
+            conditions: "{{ not wait.completed }}"
+            sequence: []
+        default: []
+
+automation:
+  - id: f40d63eb-1fc3-44a8-bc80-55a4c064890b
+    alias: bedroom_spots_on_off_dim
+    mode: single 
+    variables:
+      light: 'light.bedroom_spots'
+      button: 'input_boolean.bedroom_spots_button'
+      up_down: 'input_boolean.bedroom_spots_up_down'
+    trigger:
+    - platform: state
+      entity_id: input_boolean.bedroom_spots_button
+      to: "on"      
+    action:
+      - alias: Wait for release or timeout (e.g. hold)
+        wait_for_trigger:
+        - platform: state
+          entity_id: input_boolean.bedroom_spots_button
+          to: "off"
+        timeout: '00:00:01'
+        continue_on_timeout: true
+      - alias: Detect hold or short press
+        choose:
+          - alias: Hold detected - brighten or dim the light
+            conditions: "{{ wait.trigger == none }}"
+            sequence:
+              - alias: Set initial direction (e.g. brighten or dim)
+                service: >
+                  {% if is_state('light.bedroom_spots', 'on') and state_attr('light.bedroom_spots', 'brightness') | int > 200 %}
+                    input_boolean.turn_off
+                  {% else %}
+                    input_boolean.turn_on
+                  {% endif %}
+                entity_id: input_boolean.bedroom_spots_up_down
+              - alias: Outer loop for chaging direction
+                repeat:
+                  while:
+                    - condition: state
+                      entity_id: input_boolean.bedroom_spots_button
+                      state: "on"
+                      for: '00:00:00.50'
+                  sequence:
+                    - alias: Inner loop for brighten or dim step
+                      repeat:
+                        while:
+                          - condition: state
+                            entity_id: input_boolean.bedroom_spots_button
+                            state: "on"
+                            for: '00:00:00.50'
+                        sequence:                          
+                          - alias: Brighten or dim light one step
+                            service: light.turn_on
+                            entity_id: light.bedroom_spots
+                            data:
+                              brightness_step_pct: > 
+                                {% if is_state('input_boolean.bedroom_spots_up_down', 'on') %}
+                                  10
+                                {% else %}
+                                  -10
+                                {% endif %}
+                              transition: .4
+                          - delay: '00:00:00.40'
+                    - alias: Wait for another hold
+                      wait_for_trigger:
+                      - platform: state
+                        entity_id: input_boolean.bedroom_spots_button
+                        to: 'on'
+                        for: '00:00:00.50'
+                      timeout: '00:00:01'
+                    - service: input_boolean.toggle
+                      entity_id: input_boolean.bedroom_spots_up_down
+        default:
+          - alias: Short-press detected - toggle the light
+            service: light.toggle
+            entity_id: light.bedroom_spots
+
+  - id: 1568f8e0-36ab-40a2-a8f6-ef0c3d1419b3
+    alias: bedroom_spots_button
+    trigger:
+    - platform: state
+      entity_id:
+        - sensor.bedroom_switch_door_action
+        - sensor.bedroom_switch_right_action
+      to:
+        - press_1
+        #- recall_scene_1
+        #- recall_scene_2
+        #- recall_scene_3
+    mode: restart
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.bedroom_spots_button
+      - wait_for_trigger:
+        - platform: state
+          entity_id: 
+            - sensor.bedroom_switch_door_action
+            - sensor.bedroom_switch_right_action
+          to:
+            - release_1
+            #- recall_scene_5
+            #- recall_scene_6
+            #- recall_scene_7
+        timeout: '00:00:07'
+        continue_on_timeout: true
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.bedroom_spots_button
