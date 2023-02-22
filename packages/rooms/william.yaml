@@ -17,9 +17,10 @@ automation:
     to: 'on'
   condition: []
   action:
-  - service: light.turn_off
+  - service: light.turn_on
     data:
       entity_id: light.william_spots
+      brightness_pct: 5
   - service: light.turn_on
     data:
       entity_id: light.william_bed_lamp
