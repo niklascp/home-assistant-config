@@ -1,0 +1,15 @@
+plant:
+  plant_01:
+    sensors:
+      moisture: sensor.plant_01_moisture
+      temperature: sensor.plant_01_temperature
+      conductivity: sensor.plant_01_soil_conductivity
+      brightness: sensor.plant_01_illuminance
+    min_moisture: 16
+    max_moisture: 60
+    min_conductivity: 350
+    max_conductivity: 2000
+    min_brightness: 1500
+    max_brightness: 45000 
+    min_temperature: 12
+    max_temperature: 32
