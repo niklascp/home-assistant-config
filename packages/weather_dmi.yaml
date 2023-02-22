@@ -1,21 +1,20 @@
-sensor:
-  # Weather prediction
-  - platform: dmi
-    location_id: 2619856
-    monitored_conditions:
-      - temperature
-      - wind_speed
-      - wind_gust
-      - wind_bearing
-      - pressure
-      - humidity
-      - precipitation
-  - platform: dmi
-    location_id: 2619856
-    monitored_conditions:
-      - temperature
-      - precipitation
-    forecasts: 
-      - 1
-      - 2
-      - 3
+# This has been changed to use yr integration.
+
+template:
+  - sensor:
+      - name: dmi_humidity
+        unit_of_measurement: "%"
+        state: "{{state_attr('weather.home_hourly', 'humidity')}}"
+      - name: dmi_pressure
+        unit_of_measurement: "hPa"
+        state: "{{state_attr('weather.home_hourly', 'pressure')}}"
+      - name: dmi_temperature
+        unit_of_measurement: "°C"
+        state: "{{state_attr('weather.home_hourly', 'temperature')}}"
+      - name: dmi_wind_speed
+        unit_of_measurement: "m/s"
+        state: "{{state_attr('weather.home_hourly', 'wind_speed')}}"
+      - name: dmi_precipitation
+        unit_of_measurement: "mm"
+        state: "{{state_attr('weather.home_hourly', 'forecast')[0].precipitation}}"
+    
