@@ -1,46 +1,19 @@
 homeassistant:
-  # Name of the location where Home Assistant is running
-  name: Home
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret home_latitude
-  longitude: !secret home_longitude
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 41
-  # metric for Metric, imperial for Imperial
-  unit_system: metric
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: !secret time_zone
-  external_url: !secret http_base_url
-  internal_url: "http://homeassistant.local:8123"
   # Customization file
   customize: !include customize.yaml
   packages:  !include_dir_named packages
 
-# Enables the frontend
-frontend:
-  javascript_version: latest
-  themes: !include_dir_merge_named themes
-
-# Enables configuration UI
-config:
+default_config:
 
 http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
-
-# Checks for available updates
-updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
-  # include_used_components: true
 
 # Discover some devices automatically
 discovery:
   ignore:
     - philips_hue
     - google_cast
-
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
 
 # Tracked history is kept for 10 days
 recorder: !include recorder.yaml
@@ -59,10 +32,6 @@ logbook:
     domains:
       - group
     entities:
-      # Exclude nmap device trackers since they will 
-      # switch a lot between home and not_home.
-      - device_tracker.niklas_nmap_s8
-      - device_tracker.karina_nmap_6s
       # Exclude motion detectors, since they will 
       # switch on/off a lot.
       - binary_sensor.utility_room_occupancy 
@@ -70,83 +39,12 @@ logbook:
       - binary_sensor.hallway_occupancy
       - binary_sensor.hallway_closet_occupancy
 
-# Enables a map showing the location of tracked devices
-map:
-
-# Track the sun
-sun:
-
 # Text to speech
 tts:
   - platform: google_translate
     service_name: google_say
 
-# Cloud
-cloud:
-
-# System health
-system_health:
-
-# iOS and Android App
-mobile_app:
-
-# 
-media_source:
-
 group: !include groups.yaml
 automation: !include automations.yaml
-scene: !include scenes.yaml
 script: !include scripts.yaml
-zone: !include zones.yaml
-input_boolean:
-input_datetime:
-input_text:
-input_number:
-input_select:
-
-# MQTT
-mqtt:
-  # broker: core-mosquitto
-  broker: a0d7b954-mqtt
-  username: !secret mqtt_username
-  password: !secret mqtt_password
-  client_id: home-assistant
-  discovery: true
-
-device_tracker:
-  - platform: nmap_tracker
-    interval_seconds: 30
-    hosts:
-      - 10.0.1.41 # Niklas Samsung S8
-      - 10.0.1.42 # Karina iPhone 6S
-  - platform: composite
-    name: niklas
-    entity_id:
-      - device_tracker.niklas_s8_gps
-      - device_tracker.niklas_nmap_s8  
-  - platform: composite
-    name: karina
-    entity_id:
-      - device_tracker.karina_iphone  
-      - device_tracker.karina_nmap_6s
-
-stream:
-
-camera:
-  #- platform: onvif
-  #  name: outdoor_driveway
-  #  host: 10.0.1.31
-  #  port: 80
-  #  profile: 1
-  #  username: !secret camara_username
-  #  password: !secret camara_password
-  #- platform: ffmpeg
-  #  name: "Driveway Camera"
-  #  input: -rtsp_transport tcp -i rtsp://admin:cam4ME!!@10.0.1.31:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif
-  - platform: generic
-    name: "outdoor_driveway_generic"
-    authentication: digest
-    username: !secret camara_username
-    password: !secret camara_password
-    still_image_url: http://10.0.1.31/cgi-bin/snapshot.cgi
-    stream_source: rtsp://admin:cam4ME!!@10.0.1.31:554/cam/realmonitor?channel=1&subtype=1&unicast=true&proto=Onvif
+scene: !include scenes.yaml

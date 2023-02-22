@@ -5,5 +5,5 @@
   family:
     name: Familie
     entities:
-      - device_tracker.niklas
-      - device_tracker.karina
+      - person.niklas
+      - person.karina
