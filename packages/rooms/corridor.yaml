@@ -18,6 +18,7 @@ input_boolean:
 automation:
   - alias: corridor_spots_sleep_mode_on
     description: Gang / Tænder natlys ved aktivering af nat, nattelys eller bevægelse
+    id: 4a7c290a-7322-4c3f-acdb-61a5d119d684
     trigger:
       - platform: state
         entity_id: input_boolean.corridor_sleep_mode
@@ -46,6 +47,7 @@ automation:
           brightness_pct: 1
   - alias: corridor_spots_sleep_mode_on_auto_off
     description: Gang / Slukker natlys efter endt bevægelse (anvendes ikke hvis nattelys er tændt)
+    id: 93b039e3-09f5-4d04-ba16-2a37e2149060
     trigger:
       - platform: state
         entity_id: input_boolean.corridor_sleep_mode
@@ -71,6 +73,7 @@ automation:
           entity_id: light.corridor_spots
   - alias: corridor_spots_auto_on
     description: Gang / Tænder lys ved skumring
+    id: 26869a0e-94ae-4e95-b82d-294de1ac80c4
     trigger:
       - platform: state
         entity_id: sensor.day_night
@@ -93,6 +96,7 @@ automation:
           brightness_pct: 50
   - alias: corridor_spots_auto_off
     description: Gang / Slukker lys ved skumring frafald
+    id: 7e1e77f8-4e62-4cd5-be86-9a973e82c32a
     trigger:
       - platform: state
         entity_id: sensor.day_night
